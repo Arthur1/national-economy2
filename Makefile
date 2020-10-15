@@ -6,13 +6,16 @@ restart:
 	make start
 
 start:
-	cd laradock; docker-compose up -d nginx mysql phpmyadmin redis laravel-echo-server workspace;
+	cd laradock; docker-compose up -d workspace nginx mysql redis laravel-echo-server
 
 stop:
 	cd laradock; docker-compose down
 
 build:
-	cd laradock; docker-compose build nginx mysql phpmyadmin redis laravel-echo-server workspace
+	cd laradock; docker-compose build workspace nginx mysql redis laravel-echo-server
 
 exec:
 	cd laradock; docker-compose exec workspace bash
+
+exec_mysql:
+	cd laradock; docker-compose exec mysql bash
