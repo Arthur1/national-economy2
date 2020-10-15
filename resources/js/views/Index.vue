@@ -1,5 +1,12 @@
 <template>
     <div class="container">
+        <div class="jumbotron p-5 rounded-lg m-3">
+            <h1 class="display-4">National Economy Online</h1>
+            <p class="lead">「ナショナルエコノミー」シリーズがオンラインで遊べるWebアプリです</p>
+            <hr class="my-4">
+            <p>すでに登録している方は右上からログインしてください。登録を希望する方は、以下に掲載している利用規約に同意いただいた上で「登録する」ボタンを押してください</p>
+            <router-link to="/register" class="btn text-white btn-primary btn-lg">登録する</router-link>
+        </div>
         <h2 class="text-primary mt-5">ゲームデザイン</h2>
         <p>ゲーム工房スパ帝国</p>
         <ul>
@@ -56,3 +63,8 @@
         </p>
     </div>
 </template>
+<style scoped>
+.jumbotron {
+    background: #e9ecef;
+}
+</style>

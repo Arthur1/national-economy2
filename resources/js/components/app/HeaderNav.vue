@@ -17,7 +17,15 @@
                     </ul>
 
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
+                        <li class="nav-item dropdown" v-if="$store.getters.isLoggedIn">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                {{ $store.state.name  }} <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="/logout" @click.stop.prevent="logout" class="dropdown-item">ログアウト</a>
+                            </div>
+                        </li>
+                        <li class="nav-item" v-else>
                             <router-link to="/login" class="nav-link">ログイン</router-link>
                         </li>
                     </ul>
@@ -28,5 +36,15 @@
 </template>
 <script>
 export default {
+    methods: {
+        logout: function() {
+            axios.post('/api/logout').then(res => {
+                this.$store.dispatch('setUser').then(() => {
+                    this.$toast.warning('ログアウトしました')
+                    this.$router.push('/login')
+                })
+            }).catch(this.errorsToast)
+        }
+    }
 }
 </script>
