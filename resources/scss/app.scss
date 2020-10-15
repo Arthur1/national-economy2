@@ -8,10 +8,13 @@
 // Fonts
 @import '~noto-sans-jp/noto_sans_jp_regular/css.css';
 
+// variables
+
 // scss-docs-start import-stack
 // Configuration
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
+@import 'variables';
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
 

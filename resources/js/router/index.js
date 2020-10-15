@@ -1,6 +1,9 @@
 import VueRouter from 'vue-router'
 
 import Index from '../views/Index.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import NotFound from '../views/NotFound.vue'
 
 const routes = [
     {
@@ -9,7 +12,38 @@ const routes = [
         component: Index,
         meta: {
             title: 'TOP',
-            needsAuth: false
+            needsAuth: false,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: Login,
+        meta: {
+            title: 'ログイン',
+            needsAuth: false,
+            hasHeader: false
+        }
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: Register,
+        meta: {
+            title: 'ユーザ登録',
+            needsAuth: false,
+            hasHeader: false
+        }
+    },
+    {
+        path: '*',
+        name: 'not_found',
+        component: NotFound,
+        meta: {
+            title: 'Not Found',
+            needsAuth: false,
+            hasHeader: true
         }
     }
 ]
