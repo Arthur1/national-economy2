@@ -16,8 +16,9 @@ class CreateGameBuildingsTable extends Migration
         Schema::create('game_buildings', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('game_id');
-            $table->integer('owner_order')->nullable();
-            $table->integer('origin_owner_order')->nullable();
+            $table->bigInteger('card_id');
+            $table->integer('own_player_order')->nullable();
+            $table->integer('origin_own_player_order')->nullable();
             $table->timestamps();
         });
     }

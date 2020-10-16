@@ -21,7 +21,7 @@
 import Utils from '../mixins/utils'
 export default {
     mixins: [ Utils ],
-    data: function() {
+    data() {
         return {
             name: '',
             email: '',
@@ -30,7 +30,7 @@ export default {
         }
     },
     methods: {
-        register: function() {
+        register() {
             axios.get('/sanctum/csrf-cookie').then(response => {
                 let payload = {
                     name: this.name,

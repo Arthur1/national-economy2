@@ -15,4 +15,9 @@ final class GameType extends Enum
     const MECENAT = 'mecenat';
     const GLORY = 'glory';
     const MIX = 'mix';
+
+    public static function getValuesString(): string
+    {
+        return implode(',', self::getValues());
+    }
 }

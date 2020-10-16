@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GameUtilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,6 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout']);
 
 Route::get('/users/me', [UserController::class, 'getMyData']);
+
+Route::get('/games/in_progress', [GameUtilController::class, 'getListInProgress']);
+Route::post('/games', [GameUtilController::class, 'create']);

@@ -12,5 +12,6 @@ final class LogType extends Enum
     const PAYING = 'paying';
     const RESHUFFLE = 'reshuffle';
     const RESERVE = 'reserve';
+    const START_GAME = 'start_game';
     const END_GAME = 'end_game';
 }

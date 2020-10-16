@@ -19,14 +19,14 @@
 import Utils from '../mixins/utils'
 export default {
     mixins: [ Utils ],
-    data: function() {
+    data() {
         return {
             name: '',
             password: ''
         }
     },
     methods: {
-        login: function() {
+        login() {
             axios.get('/sanctum/csrf-cookie').then(res=> {
                 let payload = {
                     name: this.name,

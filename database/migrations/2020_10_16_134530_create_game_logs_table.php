@@ -24,6 +24,7 @@ class CreateGameLogsTable extends Migration
             $table->integer('building_id')->nullable();
             $table->enum('action_type', ActionType::getValues())->nullable();
             $table->boolean('is_done');
+            $table->boolean('is_last');
             $table->string('text');
             $table->timestamps();
         });

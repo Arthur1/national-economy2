@@ -6,6 +6,7 @@ import Index from '../views/Index.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Home from '../views/Home.vue'
+import CreateGame from '../views/CreateGame.vue'
 import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -47,6 +48,16 @@ const routes = [
         component: Home,
         meta: {
             title: 'Home',
+            needsAuth: true,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/create_game',
+        name: 'create_game',
+        component: CreateGame,
+        meta: {
+            title: 'ゲーム作成',
             needsAuth: true,
             hasHeader: true
         }
