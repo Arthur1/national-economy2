@@ -83,7 +83,7 @@ const nextAuth = (to, from, next) => {
 }
 
 router.beforeEach((to, from, next) => {
-	if (to.matched.some(record => record.meta.requiresAuth)) {
+	if (to.matched.some(record => record.meta.needsAuth)) {
         if (! store.state.isInitialized) {
             const unwatch = store.watch(state => state.isInitialized, () => {
                 unwatch()
