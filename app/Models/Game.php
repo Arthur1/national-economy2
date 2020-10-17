@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\GameType;
-use BenSampo\Enum\Traits\CastsEnums;
 
 class Game extends Model
 {
     use HasFactory;
-    use CastsEnums;
 
     protected $guarded = ['id', 'created_at'];
     public $timestamps = false;

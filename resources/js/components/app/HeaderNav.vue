@@ -9,16 +9,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item" v-if="$store.getters.isLoggedIn">
-                            <router-link :to="{ name: 'home' }" class="nav-link">ホーム</router-link>
+                            <router-link :to="{ name: 'home' }" class="nav-link" exact-active-class="active">ホーム</router-link>
                         </li>
                         <li class="nav-item" v-if="$store.getters.isLoggedIn">
-                            <router-link :to="{ name: 'history' }" class="nav-link">ゲーム履歴</router-link>
+                            <router-link :to="{ name: 'history' }" class="nav-link" exact-active-class="active">ゲーム履歴</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name: 'help' }" class="nav-link">ヘルプ</router-link>
+                            <router-link :to="{ name: 'help' }" class="nav-link" exact-active-class="active">ヘルプ</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name: 'release' }" class="nav-link">リリースノート</router-link>
+                            <router-link :to="{ name: 'release' }" class="nav-link" exact-active-class="active">リリースノート</router-link>
                         </li>
                     </ul>
 

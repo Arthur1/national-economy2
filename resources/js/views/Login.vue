@@ -6,7 +6,7 @@
                 <form @submit.prevent="login">
                     <input type="text" id="form_name" class="form-control" placeholder="ユーザ名" required autofocus v-model="name">
                     <input type="password" id="form_password" class="form-control" placeholder="パスワード" required v-model="password">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+                    <button class="btn btn-lg btn-primary btn-block text-white" type="submit">ログイン</button>
                 </form>
                 <p class="mt-3">
                     <router-link to="/register">ユーザ登録はこちら</router-link>

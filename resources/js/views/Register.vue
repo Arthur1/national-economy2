@@ -8,7 +8,7 @@
                     <input type="email" id="form_email" class="form-control" placeholder="メールアドレス" required v-model="email">
                     <input type="password" id="form_password" class="form-control" placeholder="パスワード" required v-model="password">
                     <input type="password" id="form_password_confirmation" class="form-control" placeholder="パスワード(確認)" required v-model="password_confirmation">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">登録</button>
+                    <button class="btn btn-lg btn-primary btn-block text-white" type="submit">登録</button>
                 </form>
                 <p class="mt-3">
                     <router-link to="/login">ログインはこちら</router-link>
