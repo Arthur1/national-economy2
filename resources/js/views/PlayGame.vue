@@ -18,6 +18,12 @@ export default {
                 this.game = res.data
                 console.log(res.data)
                 this.isLoading = false
+                for (let log of this.game.last_logs) {
+                    this.$toast.success(log.text)
+                }
+                if (this.game.my_player_order === this.game.current_log.player_order) {
+                    this.$toast.info('あなたの手番です')
+                }
             }).catch(err => {
                 switch (err.response.status) {
                     case 401:

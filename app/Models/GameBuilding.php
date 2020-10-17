@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\DB;
 use App\Enums\GameType;
 use App\Enums\CommonCard;
 use Carbon\Carbon;
+use App\Game\Building;
 
 class GameBuilding extends Model
 {
     use HasFactory;
+
+    const TABLE_NAME = 'game_buildings';
 
     protected $guarded = ['id'];
     protected $with = ['card'];
@@ -19,6 +22,17 @@ class GameBuilding extends Model
     public function card()
     {
         return $this->belongsTo(Card::class, 'card_id');
+    }
+
+    public function ownPlayer()
+    {
+        return $this->belongsTo(GamePlayer::class, 'player_id');
+    }
+
+    public function getEntity(Game $game): Building
+    {
+        $className = 'App\Game\Buildings\Building' . $this->card->id;
+        return new $className($this, $game);
     }
 
     public static function init(Game $game)
@@ -66,6 +80,6 @@ class GameBuilding extends Model
                 'updated_at' => $now,
             ];
         }
-        DB::table('game_buildings')->insert($building_rows);
+        DB::table(self::TABLE_NAME)->insert($building_rows);
     }
 }

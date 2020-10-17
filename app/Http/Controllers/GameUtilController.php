@@ -35,7 +35,7 @@ class GameUtilController extends Controller
 
         // プレイヤー生成
         $user_ids = $request->users;
-        GamePlayer::init($game, $user_ids);
+        GamePlayer::init($game, $user_ids, $request->get('needs_shuffle', true));
         $game->load('players');
 
         // 山札生成

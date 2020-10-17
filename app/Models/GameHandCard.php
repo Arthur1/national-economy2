@@ -10,6 +10,7 @@ class GameHandCard extends Model
 {
     use HasFactory;
 
+    const TABLE_NAME = 'game_hand_cards';
     protected $guarded = ['id'];
     public $timestamps = false;
     protected $with = ['card'];
@@ -35,7 +36,7 @@ class GameHandCard extends Model
     {
         $hand_card_rows = [];
         foreach ($game->players as $player) {
-            for ($i = 0; $i < config('game.init_hands_number'); $i++) {
+            for ($i = 0; $i < config('game.init.hands_number.' . $player->player_order, 3); $i++) {
                 $hand_card_rows[] = [
                     'game_id' => $game->id,
                     'player_id' => $player->id,
@@ -43,7 +44,7 @@ class GameHandCard extends Model
                 ];
             }
         }
-        DB::table('game_hand_cards')->insert($hand_card_rows);
+        DB::table(self::TABLE_NAME)->insert($hand_card_rows);
         return $deck_cards;
     }
 }

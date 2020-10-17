@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\GameType;
+use App\Enums\LogType;
 
 class Game extends Model
 {
@@ -13,7 +15,7 @@ class Game extends Model
 
     protected $guarded = ['id', 'created_at'];
     public $timestamps = false;
-    protected $with = ['currentLog', 'lastLogs', 'players', 'publicBuildings'];
+    protected $with = ['currentLog', 'lastLogs', 'players', 'publicBuildings', 'useBuildingInRoundLogs'];
     protected $appends = ['type_description', 'my_player_order', 'pile_cards_number'];
 
     public function logs()
@@ -60,6 +62,14 @@ class Game extends Model
             ->where('is_last', true);
     }
 
+    public function useBuildingInRoundLogs(): Relation
+    {
+        return $this->hasMany(GameLog::class, 'game_id')
+            ->where('type', LogType::USE_BUILDING)
+            ->where('round', $this->round);
+    }
+
+
     public function getTypeDescriptionAttribute(): string
     {
         return GameType::getDescription($this->attributes['type']);
@@ -73,5 +83,13 @@ class Game extends Model
     public function getPileCardsNumberAttribute(): int
     {
         return $this->pileCards()->count();
+    }
+
+    public function getPublicBuildingsTestAttribute()
+    {
+        $buildings = $this->publicBuildings()->get();
+        foreach ($buildings as $building) {
+            $entity = $building->generateEntity($this);
+        }
     }
 }

@@ -9,6 +9,8 @@ class GameDiscardCard extends Model
 {
     use HasFactory;
 
+    const TABLE_NAME = 'game_discard_cards';
+
     protected $guarded = ['id'];
     public $timestamps = false;
     protected $with = ['card'];

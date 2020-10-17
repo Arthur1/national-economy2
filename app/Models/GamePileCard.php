@@ -10,6 +10,8 @@ class GamePileCard extends Model
 {
     use HasFactory;
 
+    const TABLE_NAME = 'game_pile_cards';
+
     protected $guarded = ['id'];
     public $timestamps = false;
     protected $with = ['card'];
@@ -37,6 +39,6 @@ class GamePileCard extends Model
                 'card_id' => $card_id,
             ];
         }
-        DB::table('game_pile_cards')->insert($pile_card_rows);
+        DB::table(self::TABLE_NAME)->insert($pile_card_rows);
     }
 }

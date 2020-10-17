@@ -11,6 +11,8 @@ class GameLog extends Model
 {
     use HasFactory;
 
+    const TABLE_NAME = 'game_logs';
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function building()
@@ -46,6 +48,31 @@ class GameLog extends Model
                 'text' => '',
             ]
         ];
-        DB::table('game_logs')->insert($log_rows);
+        DB::table(self::TABLE_NAME)->insert($log_rows);
+    }
+
+    public function updateUseBuildingLog(GameBuilding $building, string $text)
+    {
+        $this->building_id = $building->id;
+        $this->text = $text;
+        $this->is_done = true;
+        $this->is_last = true;
+        $this->save();
+    }
+
+    public static function createActionLog(Game $game, GamePlayer $player, GameBuilding $building, string $action_type)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => $building->id,
+            'is_done' => false,
+            'is_last' => false,
+            'type' => LogType::ACTION,
+            'action_type' => $action_type,
+            'text' => ''
+        ]);
     }
 }

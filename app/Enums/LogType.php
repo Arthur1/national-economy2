@@ -19,9 +19,11 @@ final class LogType extends Enum
     const USE_BUILDING = 'use_building';
     const ACTION = 'action';
     const DISCARD = 'discard';
-    const PAYING = 'paying';
+    const WAGE = 'wage';
+    const SELL_BUILDINGS = 'sell_buildings';
     const RESHUFFLE = 'reshuffle';
     const RESERVE = 'reserve';
+    const ROLLBACK = 'rollback';
     const START_GAME = 'start_game';
     const END_GAME = 'end_game';
 }
