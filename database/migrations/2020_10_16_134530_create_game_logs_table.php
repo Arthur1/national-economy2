@@ -18,6 +18,7 @@ class CreateGameLogsTable extends Migration
         Schema::create('game_logs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('game_id');
+            $table->bigInteger('player_id');
             $table->integer('player_order');
             $table->integer('round');
             $table->enum('type', LogType::getValues());

@@ -11,7 +11,7 @@
                 class="list-group-item list-group-item-action"
                 :class="{'list-group-item-info': game.my_player_order === game.current_log.player_order }"
             >
-                <span class="mr-1rem">{{ game.players_number }}人ゲーム（{{ game.type }}）{{ game.my_player_order }}番手</span><br>
+                <span class="mr-1rem">{{ game.players_number }}人ゲーム（{{ game.type_description }}）{{ game.my_player_order }}番手</span><br>
                 <font-awesome-icon icon="users" />{{ game.players.map(player => player.user.name) | implode }}<br>
                 <font-awesome-icon :icon="['far', 'clock']" />{{ game.created_at }}
             </router-link>

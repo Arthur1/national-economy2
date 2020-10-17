@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameUtilController;
+use App\Http\Controllers\GamePlayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,4 @@ Route::get('/users/me', [UserController::class, 'getMyData']);
 
 Route::get('/games/in_progress', [GameUtilController::class, 'getListInProgress']);
 Route::post('/games', [GameUtilController::class, 'create']);
+Route::get('/games/{id}', [GamePlayController::class, 'getState']);

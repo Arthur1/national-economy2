@@ -34,11 +34,11 @@ class GameHandCard extends Model
     public static function init(Game $game, array $deck_cards): array
     {
         $hand_card_rows = [];
-        for ($player_order = 1; $player_order <= $game->players_number; $player_order++) {
+        foreach ($game->players as $player) {
             for ($i = 0; $i < config('game.init_hands_number'); $i++) {
                 $hand_card_rows[] = [
                     'game_id' => $game->id,
-                    'player_order' => $player_order,
+                    'player_id' => $player->id,
                     'card_id' => array_shift($deck_cards),
                 ];
             }

@@ -21,10 +21,12 @@ class GameLog extends Model
 
     public static function init(Game $game)
     {
+        $first_player = $game->players->first();
         $log_rows = [
             [
                 'game_id' => $game->id,
-                'player_order' => 1,
+                'player_id' => $first_player->id,
+                'player_order' => $first_player->player_order,
                 'round' => 1,
                 'building_id' => null,
                 'type' => LogType::START_GAME,
@@ -34,7 +36,8 @@ class GameLog extends Model
             ],
             [
                 'game_id' => $game->id,
-                'player_order' => 1,
+                'player_id' => $first_player->id,
+                'player_order' => $first_player->player_order,
                 'round' => 1,
                 'building_id' => null,
                 'type' => LogType::USE_BUILDING,

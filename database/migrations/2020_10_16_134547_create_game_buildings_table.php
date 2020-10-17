@@ -17,8 +17,8 @@ class CreateGameBuildingsTable extends Migration
             $table->id();
             $table->bigInteger('game_id');
             $table->bigInteger('card_id');
-            $table->integer('own_player_order')->nullable();
-            $table->integer('origin_own_player_order')->nullable();
+            $table->bigInteger('own_player_id')->nullable();
+            $table->bigInteger('origin_own_player_id')->nullable();
             $table->timestamps();
         });
     }

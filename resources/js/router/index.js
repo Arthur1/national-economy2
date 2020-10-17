@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Home from '../views/Home.vue'
 import CreateGame from '../views/CreateGame.vue'
+import PlayGame from '../views/PlayGame.vue'
 import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -58,6 +59,16 @@ const routes = [
         component: CreateGame,
         meta: {
             title: 'ゲーム作成',
+            needsAuth: true,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/play_game/:id',
+        name: 'play_game',
+        component: PlayGame,
+        meta: {
+            title: 'ゲームプレイ',
             needsAuth: true,
             hasHeader: true
         }

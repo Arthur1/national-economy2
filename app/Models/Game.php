@@ -14,7 +14,7 @@ class Game extends Model
     protected $guarded = ['id', 'created_at'];
     public $timestamps = false;
     protected $with = ['currentLog', 'lastLogs', 'players', 'publicBuildings'];
-    protected $appends = ['my_player_order'];
+    protected $appends = ['type_description', 'my_player_order', 'pile_cards_number'];
 
     public function logs()
     {
@@ -35,15 +35,15 @@ class Game extends Model
     public function publicBuildings()
     {
         return $this->hasMany(GameBuilding::class, 'game_id')
-            ->whereNull('own_player_order');
+            ->whereNull('own_player_id');
     }
 
-    public function pile_cards()
+    public function pileCards()
     {
         return $this->hasMany(GamePileCard::class, 'game_id');
     }
 
-    public function discard_cards()
+    public function discardCards()
     {
         return $this->hasMany(GameDiscardCard::class, 'game_id');
     }
@@ -60,13 +60,18 @@ class Game extends Model
             ->where('is_last', true);
     }
 
-    public function getTypeAttribute($value)
+    public function getTypeDescriptionAttribute(): string
     {
-        return GameType::getDescription($value);
+        return GameType::getDescription($this->attributes['type']);
     }
 
-    public function getMyPlayerOrderAttribute()
+    public function getMyPlayerOrderAttribute(): ?int
     {
         return $this->myPlayer()->first()->player_order ?? null;
+    }
+
+    public function getPileCardsNumberAttribute(): int
+    {
+        return $this->pileCards()->count();
     }
 }

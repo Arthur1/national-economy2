@@ -12,7 +12,9 @@ class GamePlayController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function states(Request $request, $id)
+    public function getState(Request $request, $id)
     {
+        $game = Game::findOrFail($id);
+        return $game;
     }
 }
