@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\GameType;
 use App\Enums\CardSeries;
-use App\Enums\CommonCard;
 
 class Card extends Model
 {

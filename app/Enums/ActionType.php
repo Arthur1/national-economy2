@@ -5,9 +5,14 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static OptionOne()
- * @method static static OptionTwo()
- * @method static static OptionThree()
+ * @method static static NO_CHOICE()
+ * @method static static RESERVE()
+ * @method static static BUILD()
+ * @method static static BUILD_FREE()
+ * @method static static BUILD_DOUBLE()
+ * @method static static DISCARD()
+ * @method static static RURAL()
+ * @method static static DESIGN_OFFICE()
  */
 final class ActionType extends Enum
 {

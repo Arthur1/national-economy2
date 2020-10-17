@@ -12,7 +12,12 @@ class GameBuilding extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'card'];
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class, 'card_id');
+    }
 
     public static function init(Game $game)
     {

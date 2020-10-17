@@ -22,8 +22,9 @@ class GameUtilController extends Controller
 
     public function getListInProgress(Request $request)
     {
-        return GamePlayer::where('user_id', Auth::id())
-            ->with('game')->get()->toArray();
+        $user = Auth::user();
+        $user->load('gamesInProgress');
+        return $user->gamesInProgress;
     }
 
     public function create(CreateGameRequest $request)

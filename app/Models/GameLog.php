@@ -16,7 +16,7 @@ class GameLog extends Model
     public function building()
     {
         if (! $this->building_id) return null;
-        return $this->belongsTo('App\Models\GameBuilding', 'building_id');
+        return $this->belongsTo(GameBuilding::class, 'building_id');
     }
 
     public static function init(Game $game)

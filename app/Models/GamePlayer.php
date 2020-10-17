@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class GamePlayer extends Model
+class GamePlayer extends Pivot
 {
     use HasFactory;
 
+    protected $table = 'game_players';
     protected $guarded = ['id'];
     public $timestamps = false;
     protected $with = ['user'];
@@ -31,11 +33,11 @@ class GamePlayer extends Model
 
     public function game()
     {
-        return $this->belongsTo('App\Models\Game', 'game_id');
+        return $this->belongsTo(Game::class, 'game_id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

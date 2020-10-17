@@ -4,6 +4,22 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
+/**
+ * @method static static GOODS()
+ * @method static static QUARRY()
+ * @method static static MINE()
+ * @method static static SCHOOL()
+ * @method static static CARPENTER()
+ * @method static static RUIN()
+ * @method static static STALL()
+ * @method static static MARKET()
+ * @method static static HIGH_SCHOOL()
+ * @method static static SUPER_MARKET()
+ * @method static static UNIVERSITY()
+ * @method static static DEPARTMENT_STORE()
+ * @method static static COLLEGE()
+ * @method static static EXPO()
+ */
 final class CommonCard extends Enum
 {
     const GOODS = 1;              // 消費財

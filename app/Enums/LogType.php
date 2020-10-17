@@ -4,6 +4,16 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
+/**
+ * @method static static USE_BUILDING()
+ * @method static static ACTION()
+ * @method static static DISCARD()
+ * @method static static PAYING()
+ * @method static static RESHUFFLE()
+ * @method static static RESERVE()
+ * @method static static START_GAME()
+ * @method static static END_GAME()
+ */
 final class LogType extends Enum
 {
     const USE_BUILDING = 'use_building';

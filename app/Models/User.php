@@ -41,4 +41,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function gamesInProgress()
+    {
+        return $this->belongsToMany(Game::class, 'game_players')
+            ->using(GamePlayer::class)
+            ->where('is_finished', false);
+    }
+
+    public function gamesFinished()
+    {
+        return $this->belongsToMany(Game::class, 'game_players')
+            ->using(GamePlayer::class)
+            ->where('is_finished', true);
+    }
 }
+

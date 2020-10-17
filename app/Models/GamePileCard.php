@@ -16,7 +16,7 @@ class GamePileCard extends Model
 
     public function card()
     {
-        return $this->belongsTo('App\Card', 'card_id');
+        return $this->belongsTo(Card::class, 'card_id');
     }
 
     public function discard()
