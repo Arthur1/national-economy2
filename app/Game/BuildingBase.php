@@ -23,8 +23,8 @@ class BuildingBase
     {
         $this->building = $building;
         $this->game = $game;
-        $this->own_player = $building->ownPlayer()->first();
-        $this->current_player = $game->myPlayer()->first();
+        $this->own_player = $game->players->first(fn($r) => $r->id === $building->own_player_id);
+        $this->current_player = $game->my_player;
         return $this;
     }
 
@@ -39,10 +39,12 @@ class BuildingBase
 
     public function canUse(): bool
     {
+        // プレイヤーでなければ使用不可
+        if ($this->current_player === null) return false;
         // 施設は使用不可
         if ($this->building->card->is_facility) return false;
         // 自分の職場もしくは公共職場でなければ使用不可
-        if (! in_array($this->building->own_player_id, [null, $this->current_player->id])) return false;
+        if (! ($this->own_player === null or $this->own_player->id === $this->current_player->id)) return false;
         // 労働者が足りていなければ使用不可
         if ($this->use_workers_number > $this->current_player->active_workers_number) return false;
         // 占有者がいなければ使用可

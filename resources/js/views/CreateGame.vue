@@ -4,7 +4,7 @@
         <form @submit.prevent="create">
             <div class="mb-3">
                 <label class="form-label" for="form_type">ゲームタイプ</label>
-                <select class="form-control" id="form_type" v-model="type">
+                <select class="form-select" id="form_type" v-model="type">
                     <option value="normal">無印</option>
                     <option value="mecenat">メセナ</option>
                     <option value="glory">グローリー</option>
@@ -13,12 +13,20 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="form_players_number">プレイ人数</label>
-                <select class="form-control" id="form_players_number" v-model="players_number" @change="flushUsers">
+                <select class="form-select" id="form_players_number" v-model="players_number" @change="flushUsers">
                     <!--<option value="1">1人</option>-->
                     <option value="2">2人</option>
                     <option value="3">3人</option>
                     <option value="4">4人</option>
                 </select>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="form_needs_shuffle" v-model="needs_shuffle" checked>
+                    <label class="form-check-label" for="form_needs_shuffle">
+                        番手をシャッフルする
+                    </label>
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="form_user_1">ユーザ名(1人目)</label>
@@ -49,6 +57,7 @@ export default {
             type: 'normal',
             players_number: 2,
             users: [],
+            needs_shuffle: true,
             is_processing: false
         }
     },
@@ -62,6 +71,7 @@ export default {
                 type: this.type,
                 players_number: this.players_number,
                 users: this.users,
+                needs_shuffle: this.needs_shuffle,
             }
             axios.post('/api/games', payload).then(res => {
                 this.$toast.success('ゲームを作成しました')

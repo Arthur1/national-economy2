@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LogType;
 
@@ -15,9 +16,8 @@ class GameLog extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function building()
+    public function building(): Relation
     {
-        if (! $this->building_id) return null;
         return $this->belongsTo(GameBuilding::class, 'building_id');
     }
 

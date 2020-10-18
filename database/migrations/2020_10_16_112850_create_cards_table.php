@@ -17,7 +17,7 @@ class CreateCardsTable extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->enum('series', CardSeries::getValues());
+            $table->enum('series', CardSeries::getValues())->index();
             $table->string('name');
             $table->integer('costs');
             $table->integer('vp');

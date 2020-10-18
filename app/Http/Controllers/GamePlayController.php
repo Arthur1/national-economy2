@@ -16,9 +16,12 @@ class GamePlayController extends Controller
     {
         $game = Game::findOrFail($id);
         foreach ($game->publicBuildings as $building) {
-            $entity = $building->getEntity($game);
-            $building->can_use = $entity->canUse();
-            $building->occupying_players = $entity->occupyingPlayers();
+            $building->appendEntityData($game);
+        }
+        foreach ($game->players as $player) {
+            foreach ($player->buildings as $building) {
+                $building->appendEntityData($game);
+            }
         }
         return $game;
     }

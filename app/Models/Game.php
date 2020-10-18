@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\GameType;
 use App\Enums\LogType;
+use Illuminate\Database\Eloquent\Collection;
 
 class Game extends Model
 {
@@ -16,47 +17,50 @@ class Game extends Model
     protected $guarded = ['id', 'created_at'];
     public $timestamps = false;
     protected $with = ['currentLog', 'lastLogs', 'players', 'publicBuildings', 'useBuildingInRoundLogs'];
-    protected $appends = ['type_description', 'my_player_order', 'pile_cards_number'];
+    protected $appends = ['type_description', 'my_player_order', 'pile_cards_number', 'my_hand_cards', 'my_player'];
+    protected $hidden = ['my_player'];
 
-    public function logs()
+    public function logs(): Relation
     {
         return $this->hasMany(GameLog::class, 'game_id');
     }
 
-    public function players()
+    public function players(): Relation
     {
         return $this->hasMany(GamePlayer::class, 'game_id');
     }
 
-    public function myPlayer()
+    /*
+    public function myPlayer(): Relation
     {
         return $this->hasOne(GamePlayer::class, 'game_id')
             ->where('user_id', Auth::id());
     }
+    */
 
-    public function publicBuildings()
+    public function publicBuildings(): Relation
     {
         return $this->hasMany(GameBuilding::class, 'game_id')
             ->whereNull('own_player_id');
     }
 
-    public function pileCards()
+    public function pileCards(): Relation
     {
         return $this->hasMany(GamePileCard::class, 'game_id');
     }
 
-    public function discardCards()
+    public function discardCards(): Relation
     {
         return $this->hasMany(GameDiscardCard::class, 'game_id');
     }
 
-    public function currentLog()
+    public function currentLog(): Relation
     {
         return $this->hasOne(GameLog::class, 'game_id')
             ->where('is_done', false);
     }
 
-    public function lastLogs()
+    public function lastLogs(): Relation
     {
         return $this->hasMany(GameLog::class, 'game_id')
             ->where('is_last', true);
@@ -69,6 +73,11 @@ class Game extends Model
             ->where('round', $this->round);
     }
 
+    public function getMyPlayerAttribute()
+    {
+        $my_user_id = Auth::id();
+        return $this->players->first(fn($r) => $r->user_id == $my_user_id);
+    }
 
     public function getTypeDescriptionAttribute(): string
     {
@@ -77,7 +86,7 @@ class Game extends Model
 
     public function getMyPlayerOrderAttribute(): ?int
     {
-        return $this->myPlayer()->first()->player_order ?? null;
+        return $this->myPlayer->player_order ?? null;
     }
 
     public function getPileCardsNumberAttribute(): int
@@ -85,11 +94,8 @@ class Game extends Model
         return $this->pileCards()->count();
     }
 
-    public function getPublicBuildingsTestAttribute()
+    public function getMyHandCardsAttribute(): ?Collection
     {
-        $buildings = $this->publicBuildings()->get();
-        foreach ($buildings as $building) {
-            $entity = $building->generateEntity($this);
-        }
+        return $this->myPlayer->handCards ?? null;
     }
 }

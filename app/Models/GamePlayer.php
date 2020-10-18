@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\CommonCard;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 
 class GamePlayer extends Pivot
@@ -15,8 +17,41 @@ class GamePlayer extends Pivot
 
     protected $guarded = ['id'];
     public $timestamps = false;
-    protected $with = ['user'];
+    protected $with = ['user', 'buildings', 'handCards'];
+    protected $appends = ['hand_buildings_number', 'hand_goods_number'];
+    protected $hidden = ['handCards'];
     protected $table = self::TABLE_NAME;
+
+    public function game(): Relation
+    {
+        return $this->belongsTo(Game::class, 'game_id');
+    }
+
+    public function user(): Relation
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function handCards(): Relation
+    {
+        return $this->hasMany(GameHandCard::class, 'player_id');
+    }
+
+    public function buildings(): Relation
+    {
+        return $this->hasMany(GameBuilding::class, 'own_player_id');
+    }
+
+    public function getHandBuildingsNumberAttribute(): int
+    {
+        return $this->handCards->filter(fn($r) => $r->card_id !== CommonCard::GOODS)->count();
+    }
+
+    public function getHandGoodsNumberAttribute(): int
+    {
+        return $this->handCards->filter(fn($r) => $r->card_id === CommonCard::GOODS)->count();
+        // return $this->handCards()->where('card_id', '=', CommonCard::GOODS)->count();
+    }
 
     public static function init(Game $game, array $user_ids, bool $needs_shuffle)
     {
@@ -40,21 +75,6 @@ class GamePlayer extends Pivot
             ];
         }
         DB::table(self::TABLE_NAME)->insert($player_rows);
-    }
-
-    public function game()
-    {
-        return $this->belongsTo(Game::class, 'game_id');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function handCards()
-    {
-        return $this->hasMany(GameHandCard::class, 'player_id');
     }
 
     public function decreaseActiveWorkersNumber(int $use_workers_number)

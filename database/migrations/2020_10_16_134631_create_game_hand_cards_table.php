@@ -16,7 +16,7 @@ class CreateGameHandCardsTable extends Migration
         Schema::create('game_hand_cards', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('game_id');
-            $table->bigInteger('player_id');
+            $table->bigInteger('player_id')->index();
             $table->integer('card_id');
         });
     }

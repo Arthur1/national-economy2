@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use App\Enums\GameType;
 use App\Enums\CommonCard;
@@ -19,20 +20,22 @@ class GameBuilding extends Model
     protected $guarded = ['id'];
     protected $with = ['card'];
 
-    public function card()
+    public function card(): Relation
     {
         return $this->belongsTo(Card::class, 'card_id');
-    }
-
-    public function ownPlayer()
-    {
-        return $this->belongsTo(GamePlayer::class, 'player_id');
     }
 
     public function getEntity(Game $game): Building
     {
         $className = 'App\Game\Buildings\Building' . $this->card->id;
         return new $className($this, $game);
+    }
+
+    public function appendEntityData(Game $game)
+    {
+        $entity = $this->getEntity($game);
+        $this->can_use = $entity->canUse();
+        $this->occupying_players = $entity->occupyingPlayers();
     }
 
     public static function init(Game $game)

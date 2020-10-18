@@ -15,7 +15,7 @@ class CreateGamePileCardsTable extends Migration
     {
         Schema::create('game_pile_cards', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('game_id');
+            $table->bigInteger('game_id')->index();
             $table->integer('card_id');
         });
     }

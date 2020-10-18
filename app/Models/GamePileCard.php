@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 
 class GamePileCard extends Model
@@ -16,7 +17,7 @@ class GamePileCard extends Model
     public $timestamps = false;
     protected $with = ['card'];
 
-    public function card()
+    public function card(): Relation
     {
         return $this->belongsTo(Card::class, 'card_id');
     }

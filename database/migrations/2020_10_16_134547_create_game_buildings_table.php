@@ -20,6 +20,7 @@ class CreateGameBuildingsTable extends Migration
             $table->bigInteger('own_player_id')->nullable();
             $table->bigInteger('origin_own_player_id')->nullable();
             $table->timestamps();
+            $table->index(['own_player_id', 'game_id']);
         });
     }
 
