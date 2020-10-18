@@ -1,12 +1,24 @@
 <template>
-    <div></div>
+    <div class="container-fluid">
+        <component :is="currentWindow" :game="game" />
+        <public-column :game="game" v-if="game" />
+    </div>
 </template>
 <script>
+import PublicColumn from '../components/play_game/columns/PublicColumn.vue'
+import WindowNone from '../components/play_game/windows/WindowNone.vue'
+import WindowHandCards from '../components/play_game/windows/WindowHandCards.vue'
 export default {
+    components: {
+        PublicColumn,
+        WindowNone,
+        WindowHandCards
+    },
     data() {
         return {
             game: null,
-            isLoading: true
+            isLoading: true,
+            currentWindow: 'WindowNone'
         }
     },
     created() {
@@ -25,6 +37,7 @@ export default {
                     this.$toast.info('あなたの手番です')
                 }
                 this.fetchLogs()
+                this.currentWindow = 'WindowHandCards'
             }).catch(err => {
                 switch (err.response.status) {
                     case 401:

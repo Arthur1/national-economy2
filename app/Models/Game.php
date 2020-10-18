@@ -91,4 +91,9 @@ class Game extends Model
     {
         return $this->myPlayer->handCards ?? null;
     }
+
+    public function getWageAttribute(): int
+    {
+        return config('game.wage.' . $this->round, 0);
+    }
 }

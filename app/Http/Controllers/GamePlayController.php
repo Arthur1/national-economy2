@@ -29,7 +29,7 @@ class GamePlayController extends Controller
     {
         $game = Game::findOrFail($id);
         $game->load(['lastLogs', 'publicBuildings', 'useBuildingInRoundLogs']);
-        $game->append(['pile_cards_number', 'my_hand_cards', 'my_player']);
+        $game->append(['pile_cards_number', 'my_hand_cards', 'my_player', 'wage']);
         $game->players->load(['buildings', 'handCards']);
         $game->players->append(['hand_buildings_number', 'hand_goods_number']);
         foreach ($game->publicBuildings as $building) {
