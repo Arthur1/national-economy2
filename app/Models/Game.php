@@ -16,27 +16,20 @@ class Game extends Model
 
     protected $guarded = ['id', 'created_at'];
     public $timestamps = false;
-    protected $with = ['currentLog', 'lastLogs', 'players', 'publicBuildings', 'useBuildingInRoundLogs'];
-    protected $appends = ['type_description', 'my_player_order', 'pile_cards_number', 'my_hand_cards', 'my_player'];
+    protected $with = ['currentLog', 'players'];
+    protected $appends = ['type_description', 'my_player_order'];
     protected $hidden = ['my_player'];
 
-    public function logs(): Relation
+    public function doneLogs(): Relation
     {
-        return $this->hasMany(GameLog::class, 'game_id');
+        return $this->hasMany(GameLog::class, 'game_id')
+            ->where('is_done', true);
     }
 
     public function players(): Relation
     {
         return $this->hasMany(GamePlayer::class, 'game_id');
     }
-
-    /*
-    public function myPlayer(): Relation
-    {
-        return $this->hasOne(GamePlayer::class, 'game_id')
-            ->where('user_id', Auth::id());
-    }
-    */
 
     public function publicBuildings(): Relation
     {

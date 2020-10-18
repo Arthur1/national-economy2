@@ -10,10 +10,10 @@ export default {
         }
     },
     created() {
-        this.fetchData()
+        this.fetchGame()
     },
     methods: {
-        fetchData() {
+        fetchGame() {
             axios.get(`/api/games/${this.$route.params.id}`).then(res => {
                 this.game = res.data
                 console.log(res.data)
@@ -24,6 +24,7 @@ export default {
                 if (this.game.my_player_order === this.game.current_log.player_order) {
                     this.$toast.info('あなたの手番です')
                 }
+                this.fetchLogs()
             }).catch(err => {
                 switch (err.response.status) {
                     case 401:
@@ -35,6 +36,14 @@ export default {
                         this.$router.push({ name: 'home' })
                         break
                 }
+            })
+        },
+        fetchLogs() {
+            axios.get(`/api/games/${this.$route.params.id}/logs`).then(res => {
+                this.logs = res.data
+                console.log(res.data)
+            }).catch(err => {
+                console.error(err)
             })
         }
     }

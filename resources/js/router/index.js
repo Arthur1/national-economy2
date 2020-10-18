@@ -3,11 +3,14 @@ import VueRouter from 'vue-router'
 import store from '../store'
 
 import Index from '../views/Index.vue'
+import Help from '../views/Help.vue'
+import Release from '../views/Release.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Home from '../views/Home.vue'
 import CreateGame from '../views/CreateGame.vue'
 import PlayGame from '../views/PlayGame.vue'
+import History from '../views/History.vue'
 import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -19,6 +22,26 @@ const routes = [
         component: Index,
         meta: {
             title: 'TOP',
+            needsAuth: false,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/release',
+        name: 'release',
+        component: Release,
+        meta: {
+            title: 'リリースノート',
+            needsAuth: false,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/help',
+        name: 'help',
+        component: Help,
+        meta: {
+            title: 'ヘルプ',
             needsAuth: false,
             hasHeader: true
         }
@@ -69,6 +92,16 @@ const routes = [
         component: PlayGame,
         meta: {
             title: 'ゲームプレイ',
+            needsAuth: true,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/history',
+        name: 'history',
+        component: History,
+        meta: {
+            title: 'ゲーム履歴',
             needsAuth: true,
             hasHeader: true
         }

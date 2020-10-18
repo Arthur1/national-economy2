@@ -17,8 +17,8 @@ class GamePlayer extends Pivot
 
     protected $guarded = ['id'];
     public $timestamps = false;
-    protected $with = ['user', 'buildings', 'handCards'];
-    protected $appends = ['hand_buildings_number', 'hand_goods_number'];
+    protected $with = ['user'];
+    protected $appends = [];
     protected $hidden = ['handCards'];
     protected $table = self::TABLE_NAME;
 

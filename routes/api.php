@@ -28,3 +28,4 @@ Route::get('/users/me', [UserController::class, 'getMyData']);
 Route::get('/games/in_progress', [GameUtilController::class, 'getListInProgress']);
 Route::post('/games', [GameUtilController::class, 'create']);
 Route::get('/games/{id}', [GamePlayController::class, 'getState']);
+Route::get('/games/{id}/logs', [GamePlayController::class, 'getDoneLogs']);
