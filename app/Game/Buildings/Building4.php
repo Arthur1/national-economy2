@@ -12,7 +12,7 @@ use App\Enums\ActionType;
  */
 final class Building4 extends BuildingBase implements Building
 {
-    use \App\Game\Traits\Worker;
+    use \App\Game\BuildingTraits\Worker;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 
@@ -24,7 +24,7 @@ final class Building4 extends BuildingBase implements Building
 
     public function canUse(): bool
     {
-        if ($this->current_player->workers_number >= $this->current_player->max_workers_number) return false;
+        if ($this->my_player->workers_number >= $this->my_player->max_workers_number) return false;
         return parent::canUse();
     }
 }

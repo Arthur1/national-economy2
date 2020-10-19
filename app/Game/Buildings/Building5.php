@@ -13,7 +13,7 @@ use App\Exceptions\GameInvalidActionException;
  */
 final class Building5 extends BuildingBase implements Building
 {
-    use \App\Game\Traits\Build;
+    use \App\Game\BuildingTraits\Build;
 
     public ?string $action_type = ActionType::BUILD;
     private string $build_card_name;
@@ -21,7 +21,7 @@ final class Building5 extends BuildingBase implements Building
     public function action(Request $request)
     {
         /*
-        $hand_cards = $this->current_player->hand_cards()->get();
+        $hand_cards = $this->my_player->hand_cards()->get();
         $build_card = $hand_cards->first(fn($v) => $v->id === $request->build_id);
         if ($build_card === null) throw new GameInvalidActionException('そのカードは建設できません');
         $cost_cards = $hand_cards->filter(fn($v) => in_array($v->id, $request->cost_ids));
@@ -38,6 +38,6 @@ final class Building5 extends BuildingBase implements Building
 
     public function log_action_text(): string
     {
-        return $this->current_player->name . 'は【大工】で【' . $this->build_card_name . '】を建設した';
+        return $this->my_player->name . 'は【大工】で【' . $this->build_card_name . '】を建設した';
     }
 }

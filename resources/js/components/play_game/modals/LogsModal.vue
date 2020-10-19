@@ -7,8 +7,13 @@
                     <button type="button" class="btn-close" data-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div v-for="log in filteredLogs" :key="log.id" class="alert alert-dark">
-                        {{ log.text }}
+                    <div v-for="round of 9" :key="round" class="rounds">
+                        <div v-if="logs[round]">
+                            <h6 class="font-weight-bold">ラウンド{{ round }}</h6>
+                            <div class="logs">
+                                <div v-for="log in logs[round]" :key="log.id">{{ log.text }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -20,11 +25,16 @@ import Modal from '../../../mixins/modal'
 
 export default {
     props: ['logs'],
-    mixins: [Modal],
-    computed: {
-        filteredLogs() {
-            return this.logs.filter(log => log.text).reverse()
-        }
-    }
+    mixins: [Modal]
 }
 </script>
+<style scoped>
+.rounds {
+    display: flex;
+    flex-direction: column-reverse;
+}
+.logs {
+    display: flex;
+    flex-direction: column-reverse;
+}
+</style>

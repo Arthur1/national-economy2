@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LogType;
+use Carbon\Carbon;
 
 class GameLog extends Model
 {
@@ -24,6 +25,7 @@ class GameLog extends Model
     public static function init(Game $game)
     {
         $first_player = $game->players->first();
+        $now = Carbon::now();
         $log_rows = [
             [
                 'game_id' => $game->id,
@@ -34,7 +36,9 @@ class GameLog extends Model
                 'type' => LogType::START_GAME,
                 'is_done' => true,
                 'is_last' => true,
-                'text' => 'ゲームを開始しました',
+                'text' => 'ゲームを開始した',
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
                 'game_id' => $game->id,
@@ -46,6 +50,8 @@ class GameLog extends Model
                 'is_done' => false,
                 'is_last' => false,
                 'text' => '',
+                'created_at' => $now,
+                'updated_at' => $now,
             ]
         ];
         DB::table(self::TABLE_NAME)->insert($log_rows);
@@ -60,6 +66,37 @@ class GameLog extends Model
         $this->save();
     }
 
+    public function updateActionLog(string $text)
+    {
+        $this->text = $text;
+        $this->is_done = true;
+        $this->is_last = true;
+        $this->save();
+    }
+
+    public static function flushLastLogs(Game $game)
+    {
+        self::where('game_id', $game->id)
+            ->where('is_last', true)
+            ->update(['is_last' => false]);
+    }
+
+    public static function createUseBuildingLog(Game $game, GamePlayer $player)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => false,
+            'is_last' => false,
+            'type' => LogType::USE_BUILDING,
+            'action_type' => null,
+            'text' => '',
+        ]);
+    }
+
     public static function createActionLog(Game $game, GamePlayer $player, GameBuilding $building, string $action_type)
     {
         self::create([
@@ -72,7 +109,7 @@ class GameLog extends Model
             'is_last' => false,
             'type' => LogType::ACTION,
             'action_type' => $action_type,
-            'text' => ''
+            'text' => '',
         ]);
     }
 }

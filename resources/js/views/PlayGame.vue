@@ -63,7 +63,7 @@ export default {
             isLoading: true,
             currentWindow: 'WindowNone',
             usingBuilding: null,
-            logs: [],
+            logs: {},
             isLastestLogs: false
         }
     },
@@ -136,7 +136,6 @@ export default {
         },
         openUseBuildingModal(building) {
             this.usingBuilding = building
-            console.log(this.$refs.useBuildingModal)
             this.$refs.useBuildingModal.openModal()
         },
         useBuilding() {
@@ -148,6 +147,10 @@ export default {
                 this.game = res.data
                 this.isLoading = false
                 this.isLastestLogs = false
+                this.$refs.useBuildingModal.closeModal()
+                for (let log of this.game.last_logs) {
+                    this.$toast.success(log.text)
+                }
             }).catch(err => {
                 this.$toast.error(err.response.data.message)
             })

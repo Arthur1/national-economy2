@@ -12,7 +12,7 @@ use App\Enums\ActionType;
  */
 final class Building3 extends BuildingBase implements Building
 {
-    use \App\Game\Traits\Draw;
+    use \App\Game\BuildingTraits\Draw;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 

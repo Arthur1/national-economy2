@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Game\Traits;
+namespace App\Game\BuildingTraits;
 
 use App\Models\GameDiscardCard;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +20,7 @@ trait Draw
             }
             GameHandCard::create([
                 'game_id' => $this->game->id,
-                'player_id' => $this->game->id,
+                'player_id' => $this->my_player->id,
                 'card_id' => $draw_card->card_id,
             ]);
             $draw_card->delete();
@@ -33,7 +33,7 @@ trait Draw
         for ($i = 0; $i < $draw_number; $i++) {
             $goods_cards[] = [
                 'game_id' => $this->game->id,
-                'player_id' => $this->game->my_user->player_order,
+                'player_id' => $this->my_player->id,
                 'card_id' => 1,
             ];
         }

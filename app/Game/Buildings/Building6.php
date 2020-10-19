@@ -12,8 +12,8 @@ use App\Enums\ActionType;
  */
 final class Building6 extends BuildingBase implements Building
 {
-    use \App\Game\Traits\Draw;
-    use \App\Game\Traits\VpToken;
+    use \App\Game\BuildingTraits\Draw;
+    use \App\Game\BuildingTraits\VpToken;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 

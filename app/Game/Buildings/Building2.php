@@ -12,23 +12,23 @@ use App\Enums\ActionType;
  */
 final class Building2 extends BuildingBase implements Building
 {
-    use \App\Game\Traits\Draw;
+    use \App\Game\BuildingTraits\Draw;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 
     public function action(Request $request)
     {
-        $old_sp_user = $this->game->users->first(fn($v) => $v->is_sp);
+        $old_sp_user = $this->game->players->first(fn($p) => $p->is_sp);
         $old_sp_user->is_sp = false;
         $old_sp_user->save();
-        $this->current_player->is_sp = true;
-        $this->current_player->save();
+        $this->my_player->is_sp = true;
+        $this->my_player->save();
         $this->drawPileCards(1);
         parent::action($request);
     }
 
     public function actionLogText(): string
     {
-        return $this->game->my_user->user->name . 'は【採石場】を使用し、スタートプレイヤーになった';
+        return $this->game->my_player->user->name . 'はスタートプレイヤーになった';
     }
 }

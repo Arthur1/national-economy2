@@ -18,7 +18,7 @@ class Game extends Model
     public $timestamps = false;
     protected $with = ['currentLog', 'players'];
     protected $appends = ['type_description', 'my_player_order'];
-    protected $hidden = ['my_player'];
+    protected $hidden = ['my_player', 'next_player'];
 
     public function doneLogs(): Relation
     {
@@ -56,7 +56,8 @@ class Game extends Model
     public function lastLogs(): Relation
     {
         return $this->hasMany(GameLog::class, 'game_id')
-            ->where('is_last', true);
+            ->where('is_last', true)
+            ->where('text', '!=', '');
     }
 
     public function useBuildingInRoundLogs(): Relation
@@ -95,5 +96,18 @@ class Game extends Model
     public function getWageAttribute(): int
     {
         return config('game.wage.' . $this->round, 0);
+    }
+
+    public function getNextPlayerAttribute(): ?GamePlayer
+    {
+        $sorted = $this->players->filter(fn($p) => $p->active_workers_number)
+            ->sortBy(function ($p) {
+                $order = $p->player_order;
+                if ($p->player_order <= $this->lastLogs->last()->player_order) {
+                    $order += $this->players_number;
+                }
+                return $order;
+            });
+        return $sorted->first();
     }
 }
