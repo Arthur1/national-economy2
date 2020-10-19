@@ -1,5 +1,5 @@
 <template>
-    <div :class="['handCard', 'bg-card-' + hand_card.card.type]" :id="'handCard-' + hand_card.id">
+    <div class="handCard" :class="[`bg-card-${hand_card.card.type}`]" :id="`handCard-${hand_card.id}`">
         <div class="handCard_costs" :class="{ 'text-warning': isChangeCosts }"><span v-if="hand_card.card.type === 'building'">{{ hand_card.real_costs || hand_card.card.costs }}</span></div>
         <div class="handCard_name">{{ hand_card.card.name }}</div>
         <div class="handCard_vp"><span v-if="hand_card.card.type === 'building'">{{ hand_card.card.vp }}</span></div>
@@ -17,16 +17,13 @@ import Tooltip from 'bootstrap/js/dist/tooltip'
 export default {
     props: ['hand_card'],
     mounted() {
-        this.$nextTick(() => {
-            const options = {
-                html: true,
-                placement: 'top',
-                boundary: 'viewport',
-                title: this.iconReplacedText,
-            }
-            const el = document.getElementById('handCard-' + this.hand_card.id)
-            new Tooltip(el, options)
-        })
+        const options = {
+            html: true,
+            placement: 'top',
+            boundary: 'viewport',
+            title: this.iconReplacedText,
+        }
+        new Tooltip(this.$el, options)
     },
     computed: {
         isChangeCosts() {

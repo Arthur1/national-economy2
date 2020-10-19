@@ -3,15 +3,13 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="gameStateDisplay border rounded border-dark">
-                    <div><span class="mr-1rem font-weight-bold">ラウンド{{ game.round }}</span> (賃金${{ game.wage }})</div>
+                    <div><span class="mr-1rem font-weight-bold">ラウンド{{ game.round }}</span>（賃金${{ game.wage }}）</div>
                     <div><span class="mr-1rem">家計: ${{ game.pool }}</span>山札: {{ game.pile_cards_number }}枚</div>
                 </div>
-                <div class="btn-group mt-3">
-                    <button type="button" @click="fetchLogs" class="btn btn-outline-secondary" data-toggle="modal" data-target="#logsModal">ログ</button>
-                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#summaryModal">サマリー</button>
+                <div class="btn-group">
+                    <button type="button" @click="$emit('push-open-logs-modal-button')" class="btn btn-outline-dark">ログ</button>
+                    <button type="button" @click="$emit('push-open-summary-modal-button')" class="btn btn-outline-dark">サマリー</button>
                 </div>
-                <logs-modal ref="logsModal" />
-                <summary-modal :game="game" />
             </div>
             <div class="col-md-9">
                 <div class="buildingBox">
@@ -21,6 +19,7 @@
                         :building="building"
                         :currentWindow="currentWindow"
                         :isMyTurn="isMyTurn"
+                        @push-open-use-building-modal-button="emitPushOpenUseBuildingModal"
                     />
                 </div>
             </div>
@@ -29,24 +28,12 @@
 </template>
 <script>
 import BuildingCard from '../cards/BuildingCard.vue'
-import SummaryModal from '../modals/SummaryModal.vue'
-import LogsModal from '../modals/LogsModal.vue'
 export default {
-    props: ['game'],
-    components: { BuildingCard, SummaryModal, LogsModal },
-    data() {
-        return {
-            currentWindow: 'WindowHandCards',
-        }
-    },
-    computed: {
-        isMyTurn() {
-            return false
-        }
-    },
+    props: ['game', 'currentWindow', 'isMyTurn'],
+    components: { BuildingCard },
     methods: {
-        fetchLogs() {
-            this.$refs.logsModal.fetchLogs()
+        emitPushOpenUseBuildingModal(building) {
+            this.$emit('push-open-use-building-modal-button', building)
         }
     }
 }

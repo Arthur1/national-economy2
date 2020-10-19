@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="alert alert-info mt-3" role="alert">
+        <div v-if="isMyTurn" class="alert alert-info mt-3" role="alert">
             あなたの手番です
         </div>
         <div class="handCardsWrapper row">
@@ -17,7 +17,7 @@
 import HandCard from '../cards/HandCard.vue'
 export default {
     components: { HandCard },
-    props: ['game'],
+    props: ['game', 'isMyTurn'],
 }
 </script>
 <style scoped>

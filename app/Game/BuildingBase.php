@@ -39,8 +39,8 @@ class BuildingBase
 
     public function canUse(): bool
     {
-        // プレイヤーでなければ使用不可
-        if ($this->current_player === null) return false;
+        // 自分の番でなければ使用不可
+        if ($this->current_player === null || $this->current_player->id !== $this->game->currentLog->player_id) return false;
         // 施設は使用不可
         if ($this->building->card->is_facility) return false;
         // 自分の職場もしくは公共職場でなければ使用不可

@@ -16,28 +16,14 @@
     </div>
 </template>
 <script>
+import Modal from '../../../mixins/modal'
+
 export default {
-    data() {
-        return {
-            logs: [],
-            isLatest: false
-        }
-    },
+    props: ['logs'],
+    mixins: [Modal],
     computed: {
         filteredLogs() {
             return this.logs.filter(log => log.text).reverse()
-        }
-    },
-    methods: {
-        fetchLogs() {
-            if (this.isLatest) return
-            axios.get(`/api/games/${this.$route.params.id}/logs`).then(res => {
-                this.logs = res.data
-                this.isLatest = true
-                console.log(res.data)
-            }).catch(err => {
-                console.error(err)
-            })
         }
     }
 }

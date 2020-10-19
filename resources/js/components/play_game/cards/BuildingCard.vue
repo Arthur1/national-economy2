@@ -1,7 +1,10 @@
 <template>
-    <div :class="'buildingCard bg-card-' + building.card.type + (building.is_useable ? ' isUseable' : '')"
-        :id="'buildingCard-' + building.id"
-        @click="openModal">
+    <div
+        class="buildingCard"
+        :class="{[`bg-card-${building.card.type}`]: true, 'buildingCard-canUse': building.can_use}"
+        :id="`buildingCard-${building.id}`"
+        @click="openModal"
+    >
         <div class="buildingCard_costs"><span v-if="building.card.type === 'building'">{{ building.card.costs }}</span></div>
         <div class="buildingCard_name">{{ building.card.name }}</div>
         <div class="buildingCard_vp"><span v-if="building.card.type === 'building'">{{ building.card.vp }}</span></div>
@@ -13,27 +16,21 @@
             <div v-if="building.card.is_industry" class="icon icon-industry"></div>
             <div v-if="building.card.is_facility" class="icon icon-facility"></div>
         </div>
-        <use-building-modal :building="building" />
     </div>
 </template>
 <script>
 import Tooltip from 'bootstrap/js/dist/tooltip'
-import UseBuildingModal from '../modals/UseBuildingModal.vue'
 
 export default {
     props: ['building', 'isMyTurn', 'currentWindow'],
-    components: { UseBuildingModal },
     mounted() {
-       this.$nextTick(() => {
-            const options = {
-                html: true,
-                placement: 'top',
-                boundary: 'viewport',
-                title: this.iconReplacedText,
-            }
-            const el = document.getElementById('buildingCard-' + this.building.id)
-            new Tooltip(el, options)
-        })
+        const options = {
+            html: true,
+            placement: 'top',
+            boundary: 'viewport',
+            title: this.iconReplacedText,
+        }
+        new Tooltip(this.$el, options)
     },
     computed: {
         iconReplacedText() {
@@ -45,7 +42,7 @@ export default {
     methods: {
         openModal() {
             if (this.currentWindow === 'WindowNone') return
-            if (this.currentWindow !== 'WindowDefault') {
+            if (this.currentWindow !== 'WindowHandCards') {
                 this.$toast.warning('下のウィンドウからアクションを実行してください')
                 return
             }
@@ -53,20 +50,11 @@ export default {
                 this.$toast.warning('あなたの手番ではありません')
                 return
             }
-            if (! this.building.is_useable) {
+            if (! this.building.can_use) {
                 this.$toast.warning('この職場は使用できません')
                 return
             }
-            this.$bvModal.show('buildingModal-' + this.building.id)
-        },
-        use() {
-            const payload = {id: this.building.id}
-            this.$emit('startLoading')
-            axios.post(`/api/games/${this.$route.params.id}/use_building`, payload).then(res => {
-            }).catch(err => {
-                this.$emit('endLoading')
-                this.$toast.error(err.response.data.message)
-            })
+            this.$emit('push-open-use-building-modal-button', this.building)
         }
     }
 }
@@ -79,8 +67,9 @@ export default {
     margin: 0.25rem;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.4));
     cursor: not-allowed;
+    font-size: .9rem;
 }
-.buildingCard.isUseable {
+.buildingCard-canUse {
     cursor: pointer;
 }
 .buildingCard_costs {
