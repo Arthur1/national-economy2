@@ -50,7 +50,6 @@ class GamePlayController extends Controller
 
     private function createNextLog(Game $game)
     {
-        $game->refresh();
         $next_player = $game->next_player;
         if ($next_player) {
             GameLog::createUseBuildingLog($game, $next_player);
@@ -62,8 +61,8 @@ class GamePlayController extends Controller
     private static function getGameforPlay(int $id): Game
     {
         $game = Game::findOrFail($id);
-        $game->load(['lastLogs', 'publicBuildings', 'useBuildingInRoundLogs']);
-        $game->append(['pile_cards_number', 'my_hand_cards', 'my_player', 'wage', 'next_player']);
+        $game->load(['lastLogs', 'publicBuildings', 'useBuildingLogs']);
+        $game->append(['pile_cards_number', 'my_hand_cards', 'my_player', 'wage', 'next_player', 'use_building_in_round_logs']);
         $game->players->load(['buildings', 'handCards']);
         $game->players->append(['hand_buildings_number', 'hand_goods_number']);
         foreach ($game->publicBuildings as $building) {

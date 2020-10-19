@@ -18,7 +18,7 @@ class Game extends Model
     public $timestamps = false;
     protected $with = ['currentLog', 'players'];
     protected $appends = ['type_description', 'my_player_order'];
-    protected $hidden = ['my_player', 'next_player'];
+    protected $hidden = ['my_player', 'next_player', 'useBuildingLogs'];
 
     public function doneLogs(): Relation
     {
@@ -60,11 +60,11 @@ class Game extends Model
             ->where('text', '!=', '');
     }
 
-    public function useBuildingInRoundLogs(): Relation
+    public function useBuildingLogs(): Relation
     {
         return $this->hasMany(GameLog::class, 'game_id')
             ->where('type', LogType::USE_BUILDING)
-            ->where('round', $this->round);
+            ->where('is_done', true);
     }
 
     public function getMyPlayerAttribute()
@@ -109,5 +109,10 @@ class Game extends Model
                 return $order;
             });
         return $sorted->first();
+    }
+
+    public function getUseBuildingInRoundLogsAttribute(): Collection
+    {
+        return $this->useBuildingLogs->filter(fn($l) => $l->round === $this->round);
     }
 }

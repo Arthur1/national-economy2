@@ -11,7 +11,7 @@
                         <div v-if="logs[round]">
                             <h6 class="font-weight-bold">ラウンド{{ round }}</h6>
                             <div class="logs">
-                                <div v-for="log in logs[round]" :key="log.id">{{ log.text }}</div>
+                                <div v-for="log in logs[round]" :key="log.id" :class="`text-playerOrder-${log.player_order}`">{{ log.text }}</div>
                             </div>
                         </div>
                     </div>
