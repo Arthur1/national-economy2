@@ -1,4 +1,6 @@
 <?php
+use App\Enums\CommonCard;
+
 return [
     'init' => [
         'hands_number' => [
@@ -48,5 +50,15 @@ return [
         7 => 4,
         8 => 5,
         9 => 5,
+    ],
+    'new_public_building' => [
+        2 => CommonCard::STALL,
+        3 => CommonCard::MARKET,
+        4 => CommonCard::HIGH_SCHOOL,
+        5 => CommonCard::SUPER_MARKET,
+        6 => CommonCard::UNIVERSITY,
+        7 => CommonCard::DEPARTMENT_STORE,
+        8 => CommonCard::COLLEGE,
+        9 => CommonCard::EXPO,
     ],
 ];

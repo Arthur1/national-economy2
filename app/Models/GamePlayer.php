@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class GamePlayer extends Pivot
@@ -81,5 +82,75 @@ class GamePlayer extends Pivot
     {
         $this->active_workers_number -= $use_workers_number;
         $this->save();
+    }
+
+    public function discardAuto(Game $game): bool
+    {
+        $hand_cards_number = $this->handCards->count();
+        $can_process_auto = $hand_cards_number <= $this->max_hand_cards_number;
+        if ($can_process_auto) {
+            GameLog::createDoneDiscardLog($game, $this);
+        } else {
+            GameLog::createDiscardLog($game, $this);
+        }
+        return $can_process_auto;
+    }
+
+    public function payAuto(Game $game): bool
+    {
+        $total_wage = $this->workers_number * $game->wage;
+        $sell_buildings = new Collection([]);
+        if ($this->money < $total_wage) {
+            // 売却が必要
+            $sellable_buildings = $this->buildings
+                ->filter(fn($b) => $b->card->is_sellable)
+                ->sortByDesc(fn($b) => $b->card->vp);
+            
+            $total_vp = 0;
+            // $target_building
+            // 高い順に売却するときに初めて給料が賄えるようになる建物1件
+            $target_building = $sellable_buildings->first(function ($b) use (&$total_vp, $total_wage) {
+                $total_vp += $b->card->vp;
+                return $total_vp + $this->money >= $total_wage;
+            });
+            if ($target_building === null) {
+                // 全部売却が必要
+                $sell_buildings = $sellable_buildings;
+            } else {
+                $except_target_buildings = $sellable_buildings->filter(fn($b) => $b->id !== $target_building->id);
+                // $target_building以外をすべて売却したときに給料が賄えるか
+                if ($except_target_buildings->sum(fn($b) => $b->card->vp) + $this->money >= $total_wage) {
+                    GameLog::createWageLog($game, $this);
+                    return false;
+                }
+                // 賄えないなら、高い順に自動的に売却
+                foreach ($sellable_buildings as $building) {
+                    $sell_buildings->push($building);
+                    if ($building->id === $target_building->id) break;
+                }
+            }
+        }
+
+        $total_return = $sell_buildings->sum(fn($b) => $b->card->vp);
+        GameBuilding::sellBuildings($sell_buildings);
+        if ($sell_buildings->count()) {
+            GameLog::createSellBuildingsLog($game, $this, $sell_buildings);
+        }
+        $this->money += $total_return;
+
+        $paying_money = $total_wage;
+        $debt = $total_wage - $this->money;
+        if ($debt > 0) {
+            $this->debt += $debt;
+            $paying_money -= $debt;
+        }
+
+        $this->money -= $paying_money;
+        $this->save();
+        $game->refresh();
+        $game->pool += $paying_money;
+        $game->save();
+        GameLog::createDoneWageLog($game, $this, $paying_money, $debt);
+        return true;
     }
 }

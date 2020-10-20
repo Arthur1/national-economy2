@@ -35,7 +35,7 @@ final class Building17 extends BuildingBase implements Building
             'card_id' => $picked_card->card_id,
         ]);
         $this->picked_card_name = $picked_card->card->name;
-        $this->unpicked_card_names = $unpicked_cards->pluck('card.name');
+        $this->unpicked_card_names = $unpicked_cards->pluck('card.name')->toArray();
         foreach ($revealed_cards as $card) {
             $card->discard();
         }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use App\Enums\LogType;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class GameLog extends Model
 {
@@ -136,6 +137,91 @@ class GameLog extends Model
             'type' => LogType::ROLLBACK,
             'action_type' => null,
             'text' => $player->user->name . 'は職場の使用をロールバックした',
+        ]);
+    }
+
+    public static function createDoneDiscardLog(Game $game, GamePlayer $player)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => true,
+            'is_last' => true,
+            'type' => LogType::DISCARD,
+            'action_type' => null,
+            'text' => $player->user->name . 'は手札を捨てる必要がなかった',
+        ]);
+    }
+
+    public static function createDiscardLog(Game $game, GamePlayer $player)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => false,
+            'is_last' => false,
+            'type' => LogType::DISCARD,
+            'action_type' => null,
+            'text' => '',
+        ]);
+    }
+
+    public static function createSellBuildingsLog(Game $game, GamePlayer $player, Collection $sell_buildings)
+    {
+        $building_names = $sell_buildings->map(fn($b) => '【' . $b->card->id . '】')->toArray();
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => true,
+            'is_last' => true,
+            'type' => LogType::SELL_BUILDINGS,
+            'action_type' => null,
+            'text' => $player->user->name . 'は' . implode('', $building_names) .'を売却した',
+        ]);
+    }
+
+    public static function createDoneWageLog(Game $game, GamePlayer $player, int $paying_money, int $debt)
+    {
+        $text = $player->user->name . 'は賃金を$' . $paying_money . '支払った';
+        if ($debt > 0) {
+            $text .= '。未払い賃金を' . $debt . '枚得た';
+        }
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => true,
+            'is_last' => true,
+            'type' => LogType::WAGE,
+            'action_type' => null,
+            'text' => $text,
+        ]);
+    }
+
+    public static function createWageLog(Game $game, GamePlayer $player)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => false,
+            'is_last' => false,
+            'type' => LogType::WAGE,
+            'action_type' => null,
+            'text' => '',
         ]);
     }
 }

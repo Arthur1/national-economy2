@@ -69,6 +69,20 @@ class Game extends Model
             ->where('is_done', true);
     }
 
+    public function discardLogs(): Relation
+    {
+        return $this->hasMany(GameLog::class, 'game_id')
+            ->where('type', LogType::DISCARD)
+            ->where('is_done', true);
+    }
+
+    public function wageLogs(): Relation
+    {
+        return $this->hasMany(GameLog::class, 'game_id')
+            ->where('type', LogType::WAGE)
+            ->where('is_done', true);
+    }
+
     public function getMyPlayerAttribute()
     {
         $my_user_id = Auth::id();
@@ -116,5 +130,28 @@ class Game extends Model
     public function getUseBuildingInRoundLogsAttribute(): Collection
     {
         return $this->useBuildingLogs->filter(fn($l) => $l->round === $this->round);
+    }
+
+    public function getDiscardInRoundLogsAttribute(): Collection
+    {
+        return $this->discardLogs->filter(fn($l) => $l->round === $this->round);
+    }
+
+    public function getWageInRoundLogsAttribute(): Collection
+    {
+        return $this->wageLogs->filter(fn($l) => $l->round === $this->round);
+    }
+
+    public function getPlayersSortedFromSpAttribute(): Collection
+    {
+        $sp_player = $this->players->first(fn($p) => $p->is_sp);
+        $sorted_player = $this->players->sortBy(function($p) use ($sp_player) {
+            $order = $p->player_order;
+            if ($p->player_order < $sp_player->player_order) {
+                $order += $this->players_number;
+            }
+            return $order;
+        });
+        return $sorted_player;
     }
 }

@@ -10,6 +10,7 @@ use App\Enums\GameType;
 use App\Enums\CommonCard;
 use Carbon\Carbon;
 use App\Game\Building;
+use Illuminate\Support\Collection;
 
 class GameBuilding extends Model
 {
@@ -84,5 +85,20 @@ class GameBuilding extends Model
             ];
         }
         DB::table(self::TABLE_NAME)->insert($building_rows);
+    }
+
+    public static function sellBuildings(Collection $sell_buildings)
+    {
+        $sell_building_ids = $sell_buildings->pluck('id')->toArray();
+        self::whereIn('id', $sell_building_ids)->update(['own_player_id' => null]);
+    }
+
+    public static function createNewPublicBuilding(Game $game)
+    {
+        $new_building_card_id = config('game.new_public_building.' . $game->round, 3);
+        self::create([
+            'game_id' => $game->id,
+            'card_id' => $new_building_card_id,
+        ]);
     }
 }
