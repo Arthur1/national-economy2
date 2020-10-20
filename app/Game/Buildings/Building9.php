@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\Enums\ActionType;
 
 /**
- * 学校
+ * 高等学校
  */
-final class Building4 extends BuildingBase implements Building
+final class Building9 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Worker;
 
@@ -18,18 +18,18 @@ final class Building4 extends BuildingBase implements Building
 
     public function action(Request $request)
     {
-        $this->increaseWorkers(1);
+        $this->setWorkersNumber(4);
         parent::action($request);
     }
 
     public function canUse(): bool
     {
-        if ($this->my_player->workers_number >= $this->my_player->max_workers_number) return false;
+        if ($this->my_player->workers_number >= min(4, $this->my_player->max_workers_number)) return false;
         return parent::canUse();
     }
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'は労働者を1人増やした';
+        return $this->my_player->user->name . 'は労働者を4人に増やした';
     }
 }

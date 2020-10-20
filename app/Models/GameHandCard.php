@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Game\HandCard;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -31,6 +32,18 @@ class GameHandCard extends Model
             ]);
         }
         $this->delete();
+    }
+
+    public function getEntity(Game $game): HandCard
+    {
+        $className = 'App\Game\HandCards\HandCard' . $this->card->id;
+        return new $className($this, $game);
+    }
+
+    public function appendEntityData(Game $game)
+    {
+        $entity = $this->getEntity($game);
+        $this->real_costs = $entity->getRealCosts();
     }
 
     public static function init(Game $game, array $deck_cards): array

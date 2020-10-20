@@ -9,9 +9,9 @@ use App\Enums\ActionType;
 use App\Exceptions\GameInvalidActionException;
 
 /**
- * 大工
+ * 建設会社
  */
-final class Building5 extends BuildingBase implements Building
+final class Building22 extends BuildingBase implements Building
 {
     public ?string $action_type = ActionType::BUILD;
     private string $build_card_name;
@@ -23,7 +23,9 @@ final class Building5 extends BuildingBase implements Building
         if ($build_card === null) throw new GameInvalidActionException('そのカードは建設できません');
         $cost_cards = $hand_cards->filter(fn($h) => in_array($h->id, $request->cost_ids));
         $build_card_entity = $build_card->getEntity($this->game);
-        if ($build_card_entity->getRealCosts() !== $cost_cards->count()) throw new GameInvalidActionException('コストが異なります');
+        $real_costs = $build_card_entity->getRealCosts();
+        if ($real_costs >= 1) $real_costs--;
+        if ($real_costs !== $cost_cards->count()) throw new GameInvalidActionException('コストが異なります');
         $build_card_entity->build();
         $this->build_card_name = $build_card->card->name;
         foreach ($cost_cards as $cost_card) {

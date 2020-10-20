@@ -74,11 +74,21 @@ class GameLog extends Model
         $this->save();
     }
 
+    public function rollbackUseBuilding()
+    {
+        $this->is_done = false;
+        $this->is_last = false;
+        $this->building_id = null;
+        $this->text = '';
+        $this->save();
+    }
+
     public static function flushLastLogs(Game $game)
     {
-        self::where('game_id', $game->id)
+        DB::table(self::TABLE_NAME)
+            ->where('game_id', $game->id)
             ->where('is_last', true)
-            ->update(['is_last' => false]);
+            ->update(['is_last' => false]); 
     }
 
     public static function createUseBuildingLog(Game $game, GamePlayer $player)
@@ -110,6 +120,22 @@ class GameLog extends Model
             'type' => LogType::ACTION,
             'action_type' => $action_type,
             'text' => '',
+        ]);
+    }
+
+    public static function createRollbackLog(Game $game, GamePlayer $player, GameBuilding $building)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => $building->id,
+            'is_done' => true,
+            'is_last' => true,
+            'type' => LogType::ROLLBACK,
+            'action_type' => null,
+            'text' => $player->user->name . 'は職場の使用をロールバックした',
         ]);
     }
 }

@@ -21,4 +21,9 @@ final class Building3 extends BuildingBase implements Building
         $this->drawPileCards(1);
         parent::action($request);
     }
+
+    protected function actionLogText(): string
+    {
+        return $this->my_player->user->name . 'は建物を1枚引いた';
+    }
 }

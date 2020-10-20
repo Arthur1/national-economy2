@@ -9,10 +9,12 @@ use App\Enums\ActionType;
 use App\Exceptions\GameInvalidActionException;
 
 /**
- * 大工
+ * ゼネコン
  */
-final class Building5 extends BuildingBase implements Building
+final class Building31 extends BuildingBase implements Building
 {
+    use \App\Game\BuildingTraits\Draw;
+
     public ?string $action_type = ActionType::BUILD;
     private string $build_card_name;
 
@@ -29,11 +31,12 @@ final class Building5 extends BuildingBase implements Building
         foreach ($cost_cards as $cost_card) {
             $cost_card->discard();
         }
+        $this->drawPileCards(2);
         parent::action($request);
     }
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'は【' . $this->build_card_name . '】を建設した';
+        return $this->my_player->user->name . 'は【' . $this->build_card_name . '】を建設し、建物を2枚引いた';
     }
 }

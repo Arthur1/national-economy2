@@ -27,8 +27,8 @@ final class Building2 extends BuildingBase implements Building
         parent::action($request);
     }
 
-    public function actionLogText(): string
+    protected function actionLogText(): string
     {
-        return $this->game->my_player->user->name . 'はスタートプレイヤーになった';
+        return $this->my_player->user->name . 'はスタートプレイヤーになり、建物カードを1枚引いた';
     }
 }

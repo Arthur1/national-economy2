@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\Enums\ActionType;
 
 /**
- * 学校
+ * 大学
  */
-final class Building4 extends BuildingBase implements Building
+final class Building13 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Worker;
 
@@ -18,7 +18,7 @@ final class Building4 extends BuildingBase implements Building
 
     public function action(Request $request)
     {
-        $this->increaseWorkers(1);
+        $this->increaseActiveWorkers(1);
         parent::action($request);
     }
 
@@ -30,6 +30,6 @@ final class Building4 extends BuildingBase implements Building
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'は労働者を1人増やした';
+        return $this->my_player->user->name . 'はすぐ動ける労働者を1人増やした';
     }
 }

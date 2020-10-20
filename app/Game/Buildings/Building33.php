@@ -8,24 +8,22 @@ use Illuminate\Http\Request;
 use App\Enums\ActionType;
 
 /**
- * 遺跡
+ * 製鉄所
  */
-final class Building6 extends BuildingBase implements Building
+final class Building33 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Draw;
-    use \App\Game\BuildingTraits\VpToken;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 
     public function action(Request $request)
     {
-        $this->drawGoods(1);
-        $this->increaseVpTokens(1);
+        $this->drawPileCards(3);
         parent::action($request);
     }
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'は消費財を1枚引き、勝利点を1枚得た';
+        return $this->my_player->user->name . 'は建物を3枚引いた';
     }
 }

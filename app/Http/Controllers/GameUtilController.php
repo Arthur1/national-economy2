@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CreateGameRequest;
 use App\Models\Game;
 use App\Models\GamePlayer;
@@ -31,26 +32,33 @@ class GameUtilController extends Controller
     {
         $game_data = $request->only('type', 'players_number');
         $game_data['organizer_id'] = Auth::id();
-        $game = Game::create($game_data);
 
-        // プレイヤー生成
-        $user_ids = $request->users;
-        GamePlayer::init($game, $user_ids, $request->get('needs_shuffle', true));
-        $game->load('players');
+        DB::transaction(function () use ($game_data, $request) {
+            $game = Game::create($game_data);
 
-        // 山札生成
-        $deck_cards = Card::createDeck($game);
+            // プレイヤー生成
+            $user_ids = $request->users;
+            GamePlayer::init($game, $user_ids, $request->get('needs_shuffle', true));
+            $game->load('players');
+    
+            // 山札生成
+            $deck_cards = Card::createDeck($game);
+    
+            // 手札保存
+            $pile_cards = GameHandCard::init($game, $deck_cards);
+            
+            // 山札保存
+            GamePileCard::init($game, $pile_cards);
+    
+            // 場札生成
+            GameBuilding::init($game);
+    
+            // 最初の行動のログ生成
+            GameLog::init($game);     
+        });
 
-        // 手札保存
-        $pile_cards = GameHandCard::init($game, $deck_cards);
-        
-        // 山札保存
-        GamePileCard::init($game, $pile_cards);
-
-        // 場札生成
-        GameBuilding::init($game);
-
-        // 最初の行動のログ生成
-        GameLog::init($game);        
+        return [
+            'message' => 'Success'
+        ];
     }
 }

@@ -23,7 +23,8 @@ class Game extends Model
     public function doneLogs(): Relation
     {
         return $this->hasMany(GameLog::class, 'game_id')
-            ->where('is_done', true);
+            ->where('is_done', true)
+            ->orderBy('updated_at', 'asc');
     }
 
     public function players(): Relation
@@ -57,7 +58,8 @@ class Game extends Model
     {
         return $this->hasMany(GameLog::class, 'game_id')
             ->where('is_last', true)
-            ->where('text', '!=', '');
+            ->where('text', '!=', '')
+            ->orderBy('updated_at', 'asc');
     }
 
     public function useBuildingLogs(): Relation

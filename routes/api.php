@@ -30,3 +30,5 @@ Route::post('/games', [GameUtilController::class, 'create']);
 Route::get('/games/{id}', [GamePlayController::class, 'getState']);
 Route::get('/games/{id}/logs', [GamePlayController::class, 'getDoneLogs']);
 Route::post('/games/{id}/use_building', [GamePlayController::class, 'useBuilding']);
+Route::post('/games/{id}/rollback_use_building', [GamePlayController::class, 'rollbackUseBuilding']);
+Route::post('/games/{id}/action', [GamePlayController::class, 'action']);

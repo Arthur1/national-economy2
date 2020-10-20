@@ -4,7 +4,7 @@
             <div class="col-md-3">
                 <div class="playerStateDisplay border rounded" :class="[`border-playerOrder-${player.player_order}`]">
                     <div>
-                        <span class="mr-1rem font-weight-bold" :class="`text-playerOrder-${player.player_order}`"><span v-if="false">＞</span>{{ player.user.name }}</span>
+                        <span class="mr-1rem font-weight-bold" :class="`text-playerOrder-${player.player_order}`"><font-awesome-icon v-if="isSelfTurn" icon="angle-double-right" />{{ player.user.name }}</span>
                         <span v-if="player.is_sp" class="text-danger">[SP]</span>
                     </div>
                     <div>
@@ -45,7 +45,7 @@
 import BuildingCard from '../cards/BuildingCard.vue'
 
 export default {
-    props: ['player', 'currentWindow', 'isMyTurn'],
+    props: ['player', 'currentWindow', 'isMyTurn', 'isSelfTurn'],
     components: { BuildingCard },
     data() {
         return {}
@@ -74,5 +74,8 @@ export default {
 }
 .mr-1rem {
     margin-right: 1rem;
+}
+.playerStateDisplay svg {
+    margin-right: 0.5em;
 }
 </style>

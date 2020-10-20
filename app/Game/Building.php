@@ -13,6 +13,7 @@ interface Building
     public function canUse(): bool;
     public function occupyingPlayers(): array;
     public function action(Request $request);
-    public function vp(): int;
+    public function prepareCalcVp();
+    public function getVp(): int;
     public function isImmediateAction(): bool;
 }

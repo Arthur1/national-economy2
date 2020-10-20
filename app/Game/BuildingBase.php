@@ -3,6 +3,8 @@
 namespace App\Game;
 
 use App\Enums\ActionType;
+use App\Enums\LogType;
+use App\Exceptions\GameInvalidActionException;
 use App\Models\Game;
 use App\Models\GameBuilding;
 use App\Models\GamePlayer;
@@ -38,6 +40,22 @@ class BuildingBase
         GameLog::createActionLog($this->game, $this->my_player, $this->building, $this->action_type);
         $this->game->refresh();
         if ($this->isImmediateAction()) $this->action($request);
+    }
+
+    public function rollbackUse(Request $request)
+    {
+        if (! $this->can_rollback) throw new GameInvalidActionException('ロールバックできません');
+        GameLog::destroy($this->game->currentLog->id);
+        $last_use_building_log = $this->game->lastLogs->first(fn($l) => $l->type === LogType::USE_BUILDING);
+        $last_use_building_log->rollbackUseBuilding();
+        $last_log_ids = $this->game->lastLogs->filter(fn($l) => $l->id !== $last_use_building_log->id)->pluck('id');
+        if (count($last_log_ids)) {
+            GameLog::whereIn('id', $last_log_ids)
+                ->update(['is_last' => false]);
+        }
+        $this->my_player->active_workers_number += $this->use_workers_number;
+        $this->my_player->save();
+        GameLog::createRollbackLog($this->game, $this->my_player, $this->building);
     }
 
     public function canUse(): bool
@@ -77,7 +95,9 @@ class BuildingBase
         return '';
     }
 
-    public function vp(): int
+    public function prepareCalcVp() {}
+
+    public function getVp(): int
     {
         return $this->building->card->vp;
     }
