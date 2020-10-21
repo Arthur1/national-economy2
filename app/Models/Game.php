@@ -35,7 +35,8 @@ class Game extends Model
     public function publicBuildings(): Relation
     {
         return $this->hasMany(GameBuilding::class, 'game_id')
-            ->whereNull('own_player_id');
+            ->whereNull('own_player_id')
+            ->orderBy('updated_at');
     }
 
     public function pileCards(): Relation

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="buildModal" tabindex="-1">
+    <div class="modal fade" id="buildFreeModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">考え直す</button>
-                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-build-button')">建設する</button>
+                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-build-free-button')">建設する</button>
                 </div>
             </div>
         </div>

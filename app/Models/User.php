@@ -53,7 +53,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Game::class, 'game_players')
             ->using(GamePlayer::class)
-            ->where('is_finished', true);
+            ->where('is_finished', true)
+            ->orderByDesc('created_at');
     }
 }
 

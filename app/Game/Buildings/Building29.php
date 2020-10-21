@@ -14,6 +14,7 @@ final class Building29 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Discard;
     use \App\Game\BuildingTraits\Pool;
+    use \App\Game\BuildingTraits\HandCard;
 
     public ?string $action_type = ActionType::DISCARD;
 

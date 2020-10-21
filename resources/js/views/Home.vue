@@ -28,16 +28,13 @@ export default {
     created() {
         axios.get('/api/games/in_progress').then(res => {
             this.gamesList = res.data
-            console.log(res.data)
         }).catch(err => {
-            /*
             switch (err.response.status) {
                 case 401:
                     this.$toast.warning('再度ログインしてください')
                     this.$router.push({ name: 'login' })
                     break
             }
-            */
         })
     },
     filters: {

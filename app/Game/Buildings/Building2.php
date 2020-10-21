@@ -29,6 +29,6 @@ final class Building2 extends BuildingBase implements Building
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'はスタートプレイヤーになり、建物カードを1枚引いた';
+        return $this->my_player->user->name . 'はスタートプレイヤーになり、建物を1枚引いた';
     }
 }

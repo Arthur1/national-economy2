@@ -28,6 +28,13 @@ class GameUtilController extends Controller
         return $user->gamesInProgress;
     }
 
+    public function getListFinished(Request $request)
+    {
+        $user = Auth::user();
+        $user->load('gamesFinished');
+        return $user->gamesFinished;
+    }
+
     public function create(CreateGameRequest $request)
     {
         $game_data = $request->only('type', 'players_number');

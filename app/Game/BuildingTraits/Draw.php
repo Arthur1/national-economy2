@@ -6,6 +6,7 @@ use App\Models\GameDiscardCard;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameHandCard;
 use App\Models\GamePileCard;
+use App\Models\GameLog;
 
 trait Draw
 {
@@ -42,16 +43,17 @@ trait Draw
 
     private function reshuffle()
     {
-        $discard_cards = $this->game->discard_cards()->get();
+        $discard_cards = $this->game->discardCards()->get();
         $shuffled_discard_cards = $discard_cards->shuffle();
         $insert_cards = [];
         foreach ($shuffled_discard_cards as $card) {
             $insert_cards[] = [
                 'game_id' => $this->game->id,
-                'card_id' => $card->card->id,
+                'card_id' => $card->card_id,
             ];
         }
         DB::table(GamePileCard::TABLE_NAME)->insert($insert_cards);
         GameDiscardCard::where('game_id', $this->game->id)->delete();
+        GameLog::createReshuffleLog($this->game, $this->my_player);
     }
 }

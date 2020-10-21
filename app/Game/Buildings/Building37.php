@@ -33,6 +33,9 @@ final class Building37 extends BuildingBase implements Building
         $cost_cards = $hand_cards->filter(fn($h) => in_array($h->id, $request->cost_ids));
         if ($build_card_real_costs1 !== $cost_cards->count()) throw new GameInvalidActionException('コストが異なります');
 
+        $build_card_entity1->build();
+        $build_card_entity2->build();
+
         $this->build_card_name1 = $build_cards->first()->card->name;
         $this->build_card_name2 = $build_cards->last()->card->name;
         foreach ($cost_cards as $cost_card) {

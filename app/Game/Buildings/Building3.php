@@ -13,6 +13,7 @@ use App\Enums\ActionType;
 final class Building3 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Draw;
+    use \App\Game\BuildingTraits\Occupy;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 
@@ -25,5 +26,10 @@ final class Building3 extends BuildingBase implements Building
     protected function actionLogText(): string
     {
         return $this->my_player->user->name . 'は建物を1枚引いた';
+    }
+
+    public function canUse(): bool
+    {
+        return $this->canUseIgnoreOccupy();
     }
 }

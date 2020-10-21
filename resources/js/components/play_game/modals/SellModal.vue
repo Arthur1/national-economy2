@@ -1,17 +1,17 @@
 <template>
-    <div class="modal fade" id="buildModal" tabindex="-1">
+    <div class="modal fade" id="sellModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">確認</h5>
                     <button type="button" class="btn-close" data-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" v-if="buildHandCard">
-                    本当に{{ buildHandCard.card.name }}を建設しますか？
+                <div class="modal-body">
+                    本当に{{ cardNames }}を売却しますか？
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">考え直す</button>
-                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-build-button')">建設する</button>
+                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-sell-button')">売却する</button>
                 </div>
             </div>
         </div>
@@ -21,7 +21,13 @@
 import Modal from '../../../mixins/modal'
 
 export default {
-    props: ['buildHandCard'],
-    mixins: [Modal]
+    props: ['sellBuildings'],
+    mixins: [Modal],
+    computed: {
+        cardNames() {
+            if (! this.sellBuildings) return '';
+            return this.sellBuildings.map(hand_card => hand_card.card.name).join('・')
+        }
+    }
 }
 </script>

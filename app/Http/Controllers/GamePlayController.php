@@ -43,6 +43,7 @@ class GamePlayController extends Controller
         $buildingEntity = $building->getEntity($game);
 
         DB::transaction(function () use ($game, $buildingEntity, $request) {
+            GameLog::flushLastLogs($game);
             $buildingEntity->use($request);
             if ($buildingEntity->isImmediateAction()) {
                 $this->createNextLog($game);
@@ -78,6 +79,7 @@ class GamePlayController extends Controller
         if (! $building or $building->game_id !== $game->id) throw new GameInValidActionException('無効な行動です');
         $buildingEntity = $building->getEntity($game);
         DB::transaction(function () use ($game, $buildingEntity, $request) {
+            GameLog::flushLastLogs($game);
             $buildingEntity->action($request);
             $game->refresh();
             $this->createNextLog($game);
@@ -87,7 +89,7 @@ class GamePlayController extends Controller
         return self::getGameForPlay($id);
     }
 
-    public function designOffice(Request $request, $id)
+    public function getDesignOfficeCards(Request $request, $id)
     {
         $game = self::getGameForPlay($id);
         if ($game->currentLog->action_type !== ActionType::DESIGN_OFFICE)
@@ -96,6 +98,40 @@ class GamePlayController extends Controller
         if (! $building) throw new GameInValidActionException('無効な行動です');
         $buildingEntity = $building->getEntity($game);
         return $buildingEntity->revealCardsFromPile();
+    }
+
+    public function discard(Request $request, $id)
+    {
+        $game = self::getGameForPlay($id);
+        if ($game->currentLog->player_order !== $game->my_player->player_order)
+            throw new GameInValidActionException('あなたの手番ではありません');
+        if ($game->currentLog->type !== LogType::DISCARD)
+            throw new GameInValidActionException('無効な行動です');
+
+        DB::transaction(function () use ($game, $request) {
+            $game->my_player->discardManual($game, $request);
+            $this->createNextLog($game);
+        });
+
+        // broadcast(new GameUpdateEvent($game));
+        return self::getGameForPlay($id);
+    }
+
+    public function sell(Request $request, $id)
+    {
+        $game = self::getGameForPlay($id);
+        if ($game->currentLog->player_order !== $game->my_player->player_order)
+            throw new GameInValidActionException('あなたの手番ではありません');
+        if ($game->currentLog->type !== LogType::WAGE)
+            throw new GameInValidActionException('無効な行動です');
+
+        DB::transaction(function () use ($game, $request) {
+            $game->my_player->payManual($game, $request);
+            $this->createNextLog($game);
+        });
+
+        // broadcast(new GameUpdateEvent($game));
+        return self::getGameForPlay($id);
     }
 
     private function createNextLog(Game $game)
@@ -175,5 +211,45 @@ class GamePlayController extends Controller
             $player->save();
         }
         GameLog::createUseBuildingLog($game, $sp_player);
+    }
+
+    private static function finishGame(Game $game)
+    {
+        foreach ($game->players as $player) {
+            $player->vp = 0;
+            // 建物点
+            $buildings = $player->buildings;
+            foreach ($buildings as $building) {
+                $building_entity = $building->getEntity($game);
+                $building_entity->prepareCalcVp();
+                $player->vp += $building_entity->getVp();
+            }
+
+            // 所持金点
+            $player->vp += $player->money;
+            // トークン点
+            $player->vp += intdiv($player->vp_token, 3) * 10;
+            $player->vp += $player->vp_token % 3;
+            // 借金点
+            $player->vp -= $player->debt * 3;
+        }
+
+        // 順位の計算
+        $sp_player = $game->players->first(fn($p) => $p->is_sp);
+        $sorted_player = $game->players->sort(function($a, $b) use ($game, $sp_player) {
+            $a_player_order = $a->player_order;
+            $b_player_order = $b->player_order;
+            if ($sp_player->player_order > $a_player_order) $a_player_order += $game->players_number;
+            if ($sp_player->player_order > $b_player_order) $b_player_order += $game->players_number;
+            return $b->vp <=> $a->vp ?: $a_player_order <=> $b_player_order;
+        })->values();
+
+        foreach ($sorted_player as $i => $player) {
+            $player->rank = $i + 1;
+            $player->save();
+        }
+        $game->is_finished = true;
+        $game->save();
+        GameLog::createFinishedLog($game, $sp_player);
     }
 }

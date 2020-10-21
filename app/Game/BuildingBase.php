@@ -33,8 +33,7 @@ class BuildingBase
 
     public function use(Request $request)
     {
-        if (! $this->canUse()) throw new \Exception('a');
-        GameLog::flushLastLogs($this->game);
+        if (! $this->canUse()) throw new GameInvalidActionException('その職場は使用できません');
         $this->game->currentLog->updateUseBuildingLog($this->building, $this->useBuildingLogText());
         $this->my_player->decreaseActiveWorkersNumber($this->use_workers_number);
         GameLog::createActionLog($this->game, $this->my_player, $this->building, $this->action_type);
@@ -60,6 +59,8 @@ class BuildingBase
 
     public function canUse(): bool
     {
+        // ゲーム終了後は使用不可
+        if ($this->game->is_finished) return false;
         // 自分の番でなければ使用不可
         if ($this->my_player === null || $this->my_player->id !== $this->game->currentLog->player_id) return false;
         // 施設は使用不可
@@ -81,7 +82,6 @@ class BuildingBase
 
     public function action(Request $request)
     {
-        if (! $this->isImmediateAction()) GameLog::flushLastLogs($this->game);
         $this->game->currentLog->updateActionLog($this->actionLogText());
     }
 

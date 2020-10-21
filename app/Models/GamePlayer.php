@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Enums\CommonCard;
+use App\Exceptions\GameInvalidActionException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class GamePlayer extends Pivot
 {
@@ -96,6 +98,19 @@ class GamePlayer extends Pivot
         return $can_process_auto;
     }
 
+    public function discardManual(Game $game, Request $request)
+    {
+        $discard_hand_cards = $this->handCards->filter(fn($h) => in_array($h->id, $request->discard_ids));
+        $discards_number = $this->handCards->count() - $this->max_hand_cards_number;
+        if ($discard_hand_cards->count() !== $discards_number)
+            throw new GameInvalidActionException('捨てる枚数が異なります');
+        foreach ($discard_hand_cards as $hand_card) {
+            $hand_card->discard();
+        }
+        GameLog::flushLastLogs($game);
+        $game->currentLog->updateDiscardLog($this, $discard_hand_cards);
+    }
+
     public function payAuto(Game $game): bool
     {
         $total_wage = $this->workers_number * $game->wage;
@@ -152,5 +167,33 @@ class GamePlayer extends Pivot
         $game->save();
         GameLog::createDoneWageLog($game, $this, $paying_money, $debt);
         return true;
+    }
+
+    public function payManual(Game $game, Request $request)
+    {
+        $total_wage = $this->workers_number * $game->wage;
+        $sell_buildings = $this->buildings->filter(fn($b) => in_array($b->id, $request->sell_ids));
+
+        $unsellable_sell_buildings = $sell_buildings->filter(fn($b) => ! $b->card->is_sellable);
+        if ($unsellable_sell_buildings->count())
+            throw new GameInvalidActionException('売却できない建物が含まれています');
+
+        $total_return = $sell_buildings->sum(fn($b) => $b->card->vp);
+        if ($this->money + $total_return < $total_wage)
+            throw new GameInvalidActionException('過小売却です');
+
+        $cheapest_sell_building_vp = $sell_buildings->min(fn($b) => $b->card->vp);  
+        if ($this->money + $total_return - $cheapest_sell_building_vp >= $total_wage)
+            throw new GameInvalidActionException('過大売却です');
+
+        GameLog::flushLastLogs($game);
+        GameBuilding::sellBuildings($sell_buildings);
+        GameLog::createSellBuildingsLog($game, $this, $sell_buildings);
+
+        $this->money += $total_return - $total_wage;
+        $this->save();
+        $game->pool += $total_wage;
+        $game->save();
+        $game->currentLog->updateWageLog($this, $total_wage);
     }
 }

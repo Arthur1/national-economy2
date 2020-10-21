@@ -1,27 +1,25 @@
 <template>
     <div class="handCardsWrapper row">
         <div class="col-md-12">
-            <p class="mt-3 text-danger">建設するカードと、コストとして捨て札にするカードを選択してください。</p>
-            <form @submit.prevent="$emit('push-open-build-modal-button', buildHandCard, costIds)">
+            <p class="mt-3 text-danger">建設するカードを選択してください。</p>
+            <form @submit.prevent="$emit('push-open-build-free-modal-button', buildHandCard)">
                 <div class="handCardsBox">
                     <div class="handCardDummy text-center">
                         <button type="submit" class="btn btn-primary btn-sm text-white" :disabled="isDisabled">決定</button><br><br>
                         <button type="button" class="btn btn-secondary btn-sm" @click="$emit('push-rollback-use-building-button')">戻る</button>
                     </div>
-                    <label v-for="card in game.my_hand_cards" :key="card.id" :for="'form_buildId-' + card.id" @click.right.prevent="toggleDiscard(card.id)" :class="{'cardLabel': card.card.type !== 'goods', 'is-selected': card.id === buildId, 'is-dis-selected': costIds.includes(card.id)}">
-                        <hand-card :hand_card="card" />
+                    <label
+                        v-for="hand_card in game.my_hand_cards"
+                        :key="hand_card.id" :for="`form_buildId-${card.id}`"
+                        :class="{'cardLabel': hand_card.card.type !== 'goods', 'is-selected': hand_card.id === buildId}"
+                    >
+                        <hand-card :hand_card="hand_card" />
                     </label>
                 </div>
                 <div class="buildRadioBox">
                     <div class="buildRadio">建設</div>
-                    <div v-for="card in game.my_hand_cards" :key="card.id" class="buildRadio">
-                        <input type="radio" required :disabled="card.card.type === 'goods'" v-model="buildId" :value="card.id" :id="'form_buildId-' + card.id" name="buildId">
-                    </div>
-                </div>
-                <div class="costCheckBox">
-                    <div class="buildRadio">コスト</div>
-                    <div v-for="card in game.my_hand_cards" :key="card.id" class="costCheck">
-                        <input type="checkbox" v-model="costIds" :value="card.id">
+                    <div v-for="hand_card in game.my_hand_cards" :key="hand_card.id" class="buildRadio">
+                        <input type="radio" required :disabled="hand_card.cardtype === 'goods'" v-model="buildId" :value="hand_card.id" :id="`form_buildId-${hand_card.id}`" name="buildId">
                     </div>
                 </div>
             </form>
@@ -36,7 +34,6 @@ export default {
     data() {
         return {
             buildId: null,
-            costIds: [],
         }
     },
     computed: {
@@ -48,15 +45,6 @@ export default {
             if (! this.buildId) return true
             if (this.costIds.includes(this.buildId)) return true
             return false
-        }
-    },
-    methods: {
-        toggleDiscard(id) {
-            if (this.costIds.includes(id)) {
-                this.costIds = this.costIds.filter(costId => costId !== id)
-            } else {
-                this.costIds.push(id)
-            }
         }
     }
 }

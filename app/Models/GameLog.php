@@ -84,6 +84,24 @@ class GameLog extends Model
         $this->save();
     }
 
+    public function updateDiscardLog(GamePlayer $player, Collection $discard_hand_cards)
+    {
+        $text = $player->user->name . 'はカードを' . $discard_hand_cards->count() . '枚捨てた';
+        $this->text = $text;
+        $this->is_done = true;
+        $this->is_last = true;
+        $this->save();
+    }
+
+    public function updateWageLog(GamePlayer $player, int $paid_money)
+    {
+        $text = $player->user->name . 'は賃金を$' . $paid_money . '支払った';
+        $this->text = $text;
+        $this->is_done = true;
+        $this->is_last = true;
+        $this->save();
+    }
+
     public static function flushLastLogs(Game $game)
     {
         DB::table(self::TABLE_NAME)
@@ -174,7 +192,7 @@ class GameLog extends Model
 
     public static function createSellBuildingsLog(Game $game, GamePlayer $player, Collection $sell_buildings)
     {
-        $building_names = $sell_buildings->map(fn($b) => '【' . $b->card->id . '】')->toArray();
+        $building_names = $sell_buildings->map(fn($b) => '【' . $b->card->name . '】')->toArray();
         self::create([
             'game_id' => $game->id,
             'player_id' => $player->id,
@@ -222,6 +240,37 @@ class GameLog extends Model
             'type' => LogType::WAGE,
             'action_type' => null,
             'text' => '',
+        ]);
+    }
+
+    public static function createReshuffleLog(Game $game, GamePlayer $player)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => null,
+            'is_done' => true,
+            'is_last' => true,
+            'type' => LogType::RESHUFFLE,
+            'action_type' => null,
+            'text' => '山札がリシャッフルされました',
+        ]);
+    }
+
+    public static function createFinishedLog(Game $game, GamePlayer $player)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => 9,
+            'building_id' => null,
+            'type' => LogType::END_GAME,
+            'is_done' => true,
+            'is_last' => true,
+            'text' => 'ゲームが終了した',
         ]);
     }
 }

@@ -1,27 +1,33 @@
 <template>
     <div class="handCardsWrapper row">
         <div class="col-md-12">
-            <p class="mt-3 text-danger">建設するカードと、コストとして捨て札にするカードを選択してください。</p>
-            <form @submit.prevent="$emit('push-open-build-modal-button', buildHandCard, costIds)">
+            <p class="mt-3 text-danger">建設するカード2つと、コストとして捨て札にするカードを選択してください。</p>
+            <form @submit.prevent="$emit('push-open-build-double-modal-button', buildHandCards, cost_ids)">
                 <div class="handCardsBox">
                     <div class="handCardDummy text-center">
                         <button type="submit" class="btn btn-primary btn-sm text-white" :disabled="isDisabled">決定</button><br><br>
                         <button type="button" class="btn btn-secondary btn-sm" @click="$emit('push-rollback-use-building-button')">戻る</button>
                     </div>
-                    <label v-for="card in game.my_hand_cards" :key="card.id" :for="'form_buildId-' + card.id" @click.right.prevent="toggleDiscard(card.id)" :class="{'cardLabel': card.card.type !== 'goods', 'is-selected': card.id === buildId, 'is-dis-selected': costIds.includes(card.id)}">
-                        <hand-card :hand_card="card" />
+                    <label
+                        v-for="hand_card in game.my_hand_cards"
+                        :key="hand_card.id"
+                        :for="`form_build_ids-${hand_card.id}`"
+                        @click.right.prevent="toggleDiscard(hand_card.id)"
+                        :class="{'cardLabel': hand_card.card.type !== 'goods', 'is-selected': build_ids.includes(hand_card.id), 'is-dis-selected': cost_ids.includes(hand_card.id)}"
+                    >
+                        <hand-card :hand_card="hand_card" />
                     </label>
                 </div>
                 <div class="buildRadioBox">
                     <div class="buildRadio">建設</div>
-                    <div v-for="card in game.my_hand_cards" :key="card.id" class="buildRadio">
-                        <input type="radio" required :disabled="card.card.type === 'goods'" v-model="buildId" :value="card.id" :id="'form_buildId-' + card.id" name="buildId">
+                    <div v-for="hand_card in game.my_hand_cards" :key="hand_card.id" class="buildRadio">
+                        <input type="checkbox" v-model="build_ids" :disabled="hand_card.card.type === 'goods'" :value="hand_card.id" :id="`form_build_ids-${hand_card.id}`">
                     </div>
                 </div>
                 <div class="costCheckBox">
                     <div class="buildRadio">コスト</div>
-                    <div v-for="card in game.my_hand_cards" :key="card.id" class="costCheck">
-                        <input type="checkbox" v-model="costIds" :value="card.id">
+                    <div v-for="hand_card in game.my_hand_cards" :key="hand_card.id" class="costCheck">
+                        <input type="checkbox" v-model="cost_ids" :value="hand_card.id" :id="'form_cost_ids-' + hand_card.id">
                     </div>
                 </div>
             </form>
@@ -35,27 +41,27 @@ export default {
     props: ['game'],
     data() {
         return {
-            buildId: null,
-            costIds: [],
+            build_ids: [],
+            cost_ids: [],
         }
     },
     computed: {
-        buildHandCard() {
-            if (! this.buildId) return null
-            return this.game.my_hand_cards.find(card => card.id === this.buildId, this)
+        buildHandCards() {
+            return this.game.my_hand_cards.filter(hand_card => this.build_ids.includes(hand_card.id), this)
         },
         isDisabled() {
-            if (! this.buildId) return true
-            if (this.costIds.includes(this.buildId)) return true
+            if (this.build_ids.length !== 2) return true
+            if (this.cost_ids.includes(this.build_ids[0])) return true
+            if (this.cost_ids.includes(this.build_ids[1])) return true
             return false
         }
     },
     methods: {
         toggleDiscard(id) {
-            if (this.costIds.includes(id)) {
-                this.costIds = this.costIds.filter(costId => costId !== id)
+            if (this.cost_ids.includes(id)) {
+                this.cost_ids = this.cost_ids.filter(cost_id => cost_id !== id)
             } else {
-                this.costIds.push(id)
+                this.cost_ids.push(id)
             }
         }
     }
