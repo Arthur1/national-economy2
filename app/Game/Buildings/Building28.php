@@ -19,7 +19,7 @@ final class Building28 extends BuildingBase implements Building
     public function action(Request $request)
     {
         $hand_cards = $this->game->my_hand_cards;
-        $build_card = $hand_cards->first(fn($h) => $h->id === $request->build_id);
+        $build_card = $hand_cards->first(fn($h) => $h->id === $request->build_id and $h->card->is_agriculture);
         if ($build_card === null) throw new GameInvalidActionException('そのカードは建設できません');
         $build_card_entity = $build_card->getEntity($this->game);
         $build_card_entity->build();

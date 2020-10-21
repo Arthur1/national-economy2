@@ -12,7 +12,7 @@ trait Worker
 
     private function setWorkersNumber(int $workers_number)
     {
-        $this->my_player->workers_number += $workers_number;
+        $this->my_player->workers_number = $workers_number;
         $this->my_player->save();
     }
 

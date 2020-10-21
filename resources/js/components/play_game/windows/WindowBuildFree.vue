@@ -10,7 +10,7 @@
                     </div>
                     <label
                         v-for="hand_card in game.my_hand_cards"
-                        :key="hand_card.id" :for="`form_buildId-${card.id}`"
+                        :key="hand_card.id" :for="`form_buildId-${hand_card.id}`"
                         :class="{'cardLabel': hand_card.card.type !== 'goods', 'is-selected': hand_card.id === buildId}"
                     >
                         <hand-card :hand_card="hand_card" />
@@ -43,7 +43,6 @@ export default {
         },
         isDisabled() {
             if (! this.buildId) return true
-            if (this.costIds.includes(this.buildId)) return true
             return false
         }
     }

@@ -29,7 +29,7 @@
         "laravel-echo": "^1.9.0",
         "noto-sans-jp": "^27.0.0",
         "popper.js": "^1.16.1",
-        "socket.io-client": "^2.3.1",
+        "pusher-js": "^7.0.0",
         "vue": "^2.6.12",
         "vue-router": "^3.4.6",
         "vue-toast-notification": "^0.5.4",

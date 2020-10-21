@@ -58,12 +58,12 @@
         <build-double-modal
             ref="buildDoubleModal"
             :buildHandCards="buildHandCards"
-            @push-build-button="buildDouble"
+            @push-build-double-button="buildDouble"
         />
         <build-free-modal
             ref="buildFreeModal"
             :buildHandCard="buildHandCard"
-            @push-build-button="buildFree"
+            @push-build-free-button="buildFree"
         />
         <action-discard-modal
             ref="actionDiscardModal"
@@ -155,7 +155,18 @@ export default {
         }
     },
     created() {
-        this.fetchGame()
+        axios.get(`/api/games/${this.$route.params.id}`).then(res => {
+            this.handleFetchedGame(res)
+            Echo.private(`game.${this.game.id}`).listen('GameUpdateEvent', e => {
+                if (this.game.my_player_order && this.game.my_player_order === e.player_order) return
+                this.fetchGame()
+            })
+        }).catch(err => {
+            this.handleFetchedGameError(err)
+        })
+    },
+    beforeDestroy() {
+        Echo.leave(`game.${this.$route.params.id}`)
     },
     computed: {
         myPlayer() {
@@ -185,6 +196,7 @@ export default {
     },
     methods: {
         fetchGame() {
+            this.isLoading = true
             axios.get(`/api/games/${this.$route.params.id}`).then(res => {
                 this.handleFetchedGame(res)
             }).catch(err => {
@@ -198,6 +210,7 @@ export default {
             for (let log of this.game.last_logs) {
                 this.$toast.success(log.text)
             }
+            if (this.isMyTurn) this.myTurnAlert()
 
             // toggle window
             if (this.game.is_finished)
@@ -247,6 +260,13 @@ export default {
                 default:
                     this.$toast.error(err.response.data.message)
             }
+        },
+        myTurnAlert() {
+            const audio = new Audio('/audio/my_turn.mp3')
+            audio.volume = 0.7
+            try {
+                audio.play()
+            } catch (err) {}
         },
         openLogsModal() {
             if (this.isLastestLogs) {
@@ -333,7 +353,7 @@ export default {
         },
         buildFree() {
             const payload = {
-                build_ids: this.buildHandCards.map(hand_card => hand_card.id)
+                build_id: this.buildHandCard.id
             }
             this.isLoading = true
             axios.post(`/api/games/${this.game.id}/action`, payload).then(res => {

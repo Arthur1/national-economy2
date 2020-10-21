@@ -2,6 +2,7 @@
 
 namespace App\Game\BuildingTraits;
 
+use App\Enums\CommonCard;
 use App\Exceptions\GameInvalidActionException;
 use App\Models\GameDiscardCard;
 use App\Models\GameHandCard;
@@ -16,6 +17,7 @@ trait Discard
         if ($discard_cards->count() !== $discard_number) throw new GameInvalidActionException('捨てる枚数が異なります');
         $discard_cards_row = [];
         foreach ($discard_cards as $discard_card) {
+            if ($discard_card->card_id === CommonCard::GOODS) continue;
             $discard_cards_row[] = [
                 'game_id' => $this->game->id,
                 'card_id' => $discard_card->card->id,

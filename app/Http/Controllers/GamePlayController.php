@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ActionType;
 use App\Enums\LogType;
+use App\Events\GameUpdateEvent;
 use App\Exceptions\GameInvalidActionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,7 @@ class GamePlayController extends Controller
             }
         });
 
-        // broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game));
         return self::getGameForPlay($id);
     }
 
@@ -66,7 +67,7 @@ class GamePlayController extends Controller
             $buildingEntity->rollbackUse($request);
         });
 
-        // broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game));
         return self::getGameForPlay($id);
     }
 
@@ -85,7 +86,7 @@ class GamePlayController extends Controller
             $this->createNextLog($game);
         });
 
-        // broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game));
         return self::getGameForPlay($id);
     }
 
@@ -113,7 +114,7 @@ class GamePlayController extends Controller
             $this->createNextLog($game);
         });
 
-        // broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game));
         return self::getGameForPlay($id);
     }
 
@@ -130,7 +131,7 @@ class GamePlayController extends Controller
             $this->createNextLog($game);
         });
 
-        // broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game));
         return self::getGameForPlay($id);
     }
 

@@ -7,4 +7,4 @@ use App\Game\HandCardBase;
 /**
  * 食堂
  */
-final class HandCard41 extends HandCardBase implements HandCard {}
+final class HandCard42 extends HandCardBase implements HandCard {}
