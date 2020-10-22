@@ -11,7 +11,26 @@
                         <div v-if="logs[round]">
                             <h6 class="font-weight-bold mt-2">ラウンド{{ round }}</h6>
                             <div class="logs">
-                                <div v-for="log in logs[round]" :key="log.id" :class="`text-playerOrder-${log.player_order}`">{{ log.text }}</div>
+                                <div v-for="log in logs[round]" :key="log.id">
+                                    <div v-if="log.type === 'use_building'" class="log">
+                                        <font-awesome-icon icon="circle" :class="`text-playerOrder-${log.player_order}`" />{{ log.text }}
+                                    </div>
+                                    <div v-else-if="log.type === 'action'" class="log log-indented text-muted">
+                                        <font-awesome-icon icon="caret-right" />{{ log.text }}
+                                    </div>
+                                    <div v-else-if="log.type === 'discard'" class="log">
+                                        <font-awesome-icon icon="trash" :class="`text-playerOrder-${log.player_order}`" />{{ log.text }}
+                                    </div>
+                                    <div v-else-if="log.type === 'wage'" class="log">
+                                        <font-awesome-icon icon="dollar-sign" :class="`text-playerOrder-${log.player_order}`" />{{ log.text }}
+                                    </div>
+                                    <div v-else-if="log.type === 'sell_buildings'" class="log log-indented text-muted">
+                                        <font-awesome-icon icon="caret-right" />{{ log.text }}
+                                    </div>
+                                    <div v-else-if="log.type === 'reshuffle'" class="log">
+                                        <font-awesome-icon icon="random" />{{ log.text }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -29,6 +48,15 @@ export default {
 }
 </script>
 <style scoped>
+.log {
+    margin: 0.2rem 0;
+}
+.log-indented {
+    padding-left: 1rem;
+}
+.log svg {
+    margin-right: 0.7em;
+}
 /*
 .logs {
     display: flex;
