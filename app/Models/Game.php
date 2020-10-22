@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Enums\GameType;
 use App\Enums\LogType;
 use Illuminate\Database\Eloquent\Collection;
+use React\Http\Client\Request;
 
 class Game extends Model
 {
@@ -48,6 +49,11 @@ class Game extends Model
     public function discardCards(): Relation
     {
         return $this->hasMany(GameDiscardCard::class, 'game_id');
+    }
+
+    public function designOfficeCards(): Relation
+    {
+        return $this->hasMany(GameDesignOfficeCard::class, 'game_id');
     }
 
     public function currentLog(): Relation

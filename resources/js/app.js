@@ -22,7 +22,7 @@ const icons = [
 library.add(icons)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-store.dispatch('setUser').catch()
+store.dispatch('setUser').catch(() => {})
 
 new Vue({
     router,

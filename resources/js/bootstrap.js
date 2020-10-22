@@ -23,9 +23,9 @@ window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'national_economy',
+    key: process.env.MIX_PUSHER_APP_KEY,
     wsHost: window.location.hostname,
-    wsPort: 6001,
-    forceTLS: false,
-    disableStats: true
+    wsPort: process.env.MIX_PUSHER_WS_PORT,
+    forceTLS: process.env.MIX_APP_ENV !== 'local',
+    disableStats: true,
 });

@@ -20,7 +20,7 @@
                             <tr :class="{'table-info': this.game.round === 1 || false}">
                                 <th scope="row">1</th>
                                 <td>$2</td>
-                                <td>採石場・学校・大工・鉱山※</td>
+                                <td>採石場・学校・大工・鉱山<span v-if="needsRuin">・遺跡</span></td>
                                 <td>建物カードを参照</td>
                             </tr>
                             <tr :class="{'table-info': this.game.round === 2 || false}">
@@ -73,9 +73,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p>
-                        ※グローリー・ミックスでは遺跡も追加
-                    </p>
                 </div>
             </div>
         </div>
@@ -86,6 +83,11 @@ import Modal from '../../../mixins/modal'
 
 export default {
     props: ['game'],
-    mixins: [Modal]
+    mixins: [Modal],
+    computed: {
+        needsRuin() {
+            return this.game.type === 'glory' || this.game.type === 'mix'
+        }
+    }
 }
 </script>

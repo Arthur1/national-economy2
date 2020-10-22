@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CommonCard;
 use App\Game\HandCard;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +26,7 @@ class GameHandCard extends Model
     public function discard()
     {
         // 消費財以外
-        if ($this->card_id !== config('const.GOODS_CARD_ID')) {
+        if ($this->card_id !== CommonCard::GOODS) {
             GameDiscardCard::create([
                 'game_id' => $this->game_id,
                 'card_id' => $this->card_id,

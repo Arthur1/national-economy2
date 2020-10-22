@@ -23,7 +23,7 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        setUser: function({ commit }) {
+        setUser({ commit }) {
             return new Promise((resolve, reject) => {
                 axios.get('/api/users/me').then(res => {
                     commit('login', res.data)

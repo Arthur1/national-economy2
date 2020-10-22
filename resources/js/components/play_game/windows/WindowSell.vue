@@ -3,7 +3,7 @@
         <button class="btn btn-secondary btn-sm toggleButton" @click="toggle">切り替え</button>
         <div class="buildingsWrapper row" v-if="isMain">
             <div class="col-md-12">
-                <p class="mt-3 text-danger">売却する建物を選択してください。</p>
+                <p class="mt-3 text-danger">売却する建物を選択してください。（不足額 ${{ shortage }}）</p>
                 <form @submit.prevent="$emit('push-open-sell-modal-button', sellBuildings)">
                     <div class="handCardsBox">
                         <div class="handCardDummy text-center">
@@ -41,13 +41,20 @@ export default {
         }
     },
     computed: {
+        myPlayer() {
+            if (! this.game) return null
+            return this.game.players.find(player => player.player_order === this.game.my_player_order, this)
+        },
         buildings() {
             if (! this.game) return []
-            const my_player = this.game.players.find(player => player.player_order === this.game.my_player_order, this)
-            return my_player.buildings
+            return this.myPlayer.buildings
         },
         sellBuildings() {
             return this.buildings.filter(building => this.sell_ids.includes(building.id), this)
+        },
+        shortage() {
+            if (! this.game) return 0
+            return this.myPlayer.workers_number * this.game.wage - this.myPlayer.money 
         }
     },
     methods: {

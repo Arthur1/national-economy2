@@ -1,13 +1,13 @@
 <template>
-    <div class="pileCard" :class="[`bg-card-${pile_card.card.type}`]" :id="`pileCard-${pile_card.id}`">
-        <div class="pileCard_costs"><span v-if="pile_card.card.type === 'building'">{{ pile_card.card.costs }}</span></div>
-        <div class="pileCard_name">{{ pile_card.card.name }}</div>
-        <div class="pileCard_vp"><span v-if="pile_card.card.type === 'building'">{{ pile_card.card.vp }}</span></div>
+    <div class="designOfficeCard" :class="[`bg-card-${design_office_card.card.type}`]" :id="`designOfficeCard-${design_office_card.id}`">
+        <div class="designOfficeCard_costs"><span v-if="design_office_card.card.type === 'building'">{{ design_office_card.card.costs }}</span></div>
+        <div class="designOfficeCard_name">{{ design_office_card.card.name }}</div>
+        <div class="designOfficeCard_vp"><span v-if="design_office_card.card.type === 'building'">{{ design_office_card.card.vp }}</span></div>
         <div class="worker"></div>
         <div class="iconBox">
-            <div v-if="pile_card.card.is_agriculture" class="icon icon-agriculture"></div>
-            <div v-if="pile_card.card.is_industry" class="icon icon-industry"></div>
-            <div v-if="pile_card.card.is_facility" class="icon icon-facility"></div>
+            <div v-if="design_office_card.card.is_agriculture" class="icon icon-agriculture"></div>
+            <div v-if="design_office_card.card.is_industry" class="icon icon-industry"></div>
+            <div v-if="design_office_card.card.is_facility" class="icon icon-facility"></div>
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@
 import Tooltip from 'bootstrap/js/dist/tooltip'
 
 export default {
-    props: ['pile_card'],
+    props: ['design_office_card'],
     mounted() {
         const options = {
             html: true,
@@ -27,11 +27,11 @@ export default {
     },
     computed: {
         isChangeCosts() {
-            if (! this.pile_card.real_costs) return false
-            return this.pile_card.real_costs < this.pile_card.card.costs
+            if (! this.design_office_card.real_costs) return false
+            return this.design_office_card.real_costs < this.design_office_card.card.costs
         },
         iconReplacedText() {
-            return this.pile_card.card.text.replace(/農業アイコン/g, '<img src="/img/agriculture_icon.png" class="textIcon">')
+            return this.design_office_card.card.text.replace(/農業アイコン/g, '<img src="/img/agriculture_icon.png" class="textIcon">')
                 .replace(/工業アイコン/g, '<img src="/img/industry_icon.png" class="textIcon">')
                 .replace(/施設アイコン/g, '<img src="/img/facility_icon.png" class="textIcon">')
         }
@@ -39,7 +39,7 @@ export default {
 }
 </script>
 <style scoped>
-.pileCard {
+.designOfficeCard {
     width: 80px;
     height: 120px;
     position: relative;
@@ -49,13 +49,13 @@ export default {
     min-width: 80px;
     font-size: .9rem;
 }
-.pileCard_costs {
+.designOfficeCard_costs {
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
     color: white;
 }
-.pileCard_name {
+.designOfficeCard_name {
     position: absolute;
     top: 2rem;
     left: 0;
@@ -63,7 +63,7 @@ export default {
     color: white;
     text-align: center;
 }
-.pileCard_vp {
+.designOfficeCard_vp {
     position: absolute;
     bottom: 0.5rem;
     left: 0;

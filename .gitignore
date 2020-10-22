@@ -16,9 +16,6 @@ laravel-echo-server.lock
 
 /public/mix-manifest.json
 /public/fonts/vendor/*
-/public/css/app.css
-/public/js/app.js
-/public/js/app.js.LICENSE.txt
-/public/js/popper.js
-/public/js/popper.js.LICENSE.txt
+/public/css/
+/public/js/
 /public/vendor/

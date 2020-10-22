@@ -82,7 +82,7 @@
         />
         <pick-modal
             ref="pickModal"
-            :pickPileCard="pickPileCard"
+            :pickDesignOfficeCard="pickDesignOfficeCard"
             @push-pick-button="pick"
         />
     </div>
@@ -151,14 +151,13 @@ export default {
             costIds: null,
             discardHandCards: [],
             sellBuildings: [],
-            pickPileCard: null
+            pickDesignOfficeCard: null
         }
     },
     created() {
         axios.get(`/api/games/${this.$route.params.id}`).then(res => {
             this.handleFetchedGame(res)
-            Echo.private(`game.${this.game.id}`).listen('GameUpdateEvent', e => {
-                if (this.game.my_player_order && this.game.my_player_order === e.player_order) return
+            Echo.channel(`game.${this.game.id}`).listen('GameUpdateEvent', e => {
                 this.fetchGame()
             })
         }).catch(err => {
@@ -244,7 +243,7 @@ export default {
         },
         handleFetchedGameError(err) {
             this.isLoading = false
-            if (! err.response.status) {
+            if (! err.response) {
                 console.error(err)
                 return
             }
@@ -314,8 +313,8 @@ export default {
             this.sellBuildings = sellBuildings
             this.$refs.sellModal.openModal()
         },
-        openPickModal(pickPileCard) {
-            this.pickPileCard = pickPileCard
+        openPickModal(pickDesignOfficeCard) {
+            this.pickDesignOfficeCard = pickDesignOfficeCard
             this.$refs.pickModal.openModal()
         },
         useBuilding() {
@@ -328,6 +327,7 @@ export default {
                 this.$refs.useBuildingModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.useBuildingModal.closeModal()
             })
         },
         rollbackUseBuilding() {
@@ -349,6 +349,7 @@ export default {
                 this.$refs.buildModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.buildModal.closeModal()
             })
         },
         buildFree() {
@@ -361,6 +362,7 @@ export default {
                 this.$refs.buildFreeModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.buildFreeModal.closeModal()
             })
         },
         buildDouble() {
@@ -374,6 +376,7 @@ export default {
                 this.$refs.buildDoubleModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.buildDoubleModal.closeModal()
             })
         },
         actionDiscard() {
@@ -386,6 +389,7 @@ export default {
                 this.$refs.actionDiscardModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.actionDiscardModal.closeModal()
             })
         },
         roundEndDiscard() {
@@ -398,6 +402,7 @@ export default {
                 this.$refs.roundEndDiscardModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.roundEndDiscardModal.closeModal()
             })
         },
         sell() {
@@ -410,11 +415,12 @@ export default {
                 this.$refs.sellModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.sellModal.closeModal()
             })
         },
         pick() {
             const payload = {
-                pick_id: this.pickPileCard.id,
+                pick_id: this.pickDesignOfficeCard.id,
             }
             this.isLoading = true
             axios.post(`/api/games/${this.$route.params.id}/action`, payload).then(res => {
@@ -422,6 +428,7 @@ export default {
                 this.$refs.pickModal.closeModal()
             }).catch(err => {
                 this.handleFetchedGameError(err)
+                this.$refs.pickModal.closeModal()
             })
         }
     }

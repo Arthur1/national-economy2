@@ -51,7 +51,7 @@ class GamePlayController extends Controller
             }
         });
 
-        broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game))->toOthers();
         return self::getGameForPlay($id);
     }
 
@@ -67,7 +67,7 @@ class GamePlayController extends Controller
             $buildingEntity->rollbackUse($request);
         });
 
-        broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game))->toOthers();
         return self::getGameForPlay($id);
     }
 
@@ -86,19 +86,8 @@ class GamePlayController extends Controller
             $this->createNextLog($game);
         });
 
-        broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game))->toOthers();
         return self::getGameForPlay($id);
-    }
-
-    public function getDesignOfficeCards(Request $request, $id)
-    {
-        $game = self::getGameForPlay($id);
-        if ($game->currentLog->action_type !== ActionType::DESIGN_OFFICE)
-            throw new GameInValidActionException('無効な行動です');
-        $building = GameBuilding::find($game->currentLog->building_id);
-        if (! $building) throw new GameInValidActionException('無効な行動です');
-        $buildingEntity = $building->getEntity($game);
-        return $buildingEntity->revealCardsFromPile();
     }
 
     public function discard(Request $request, $id)
@@ -114,7 +103,7 @@ class GamePlayController extends Controller
             $this->createNextLog($game);
         });
 
-        broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game))->toOthers();
         return self::getGameForPlay($id);
     }
 
@@ -131,7 +120,7 @@ class GamePlayController extends Controller
             $this->createNextLog($game);
         });
 
-        broadcast(new GameUpdateEvent($game));
+        broadcast(new GameUpdateEvent($game))->toOthers();
         return self::getGameForPlay($id);
     }
 
@@ -174,7 +163,7 @@ class GamePlayController extends Controller
     private static function getGameForPlay(int $id): Game
     {
         $game = Game::findOrFail($id);
-        $game->load(['lastLogs', 'publicBuildings', 'useBuildingLogs']);
+        $game->load(['lastLogs', 'publicBuildings', 'useBuildingLogs', 'designOfficeCards']);
         $game->append(['pile_cards_number', 'my_hand_cards', 'my_player', 'wage', 'next_player', 'use_building_in_round_logs']);
         $game->players->load(['buildings', 'handCards']);
         $game->players->append(['hand_buildings_number', 'hand_goods_number']);

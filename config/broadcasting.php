@@ -37,11 +37,11 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => false,
-                'encrypted' => true,
-                'host' => 'php-worker',
-                'port' => 6001,
-                'scheme' => 'http',
+                'useTLS' => env('APP_ENV') !== 'local',
+                'encrypted' => env('APP_ENV') !== 'local',
+                'host' => env('PUSHER_APP_HOST'),
+                'port' => env('PUSHER_WS_PORT'),
+                'scheme' => env('APP_ENV') === 'local' ? 'http' : 'https',
             ],
         ],
 

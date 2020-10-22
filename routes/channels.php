@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
+/*
 Broadcast::channel('game.{gameID}', function ($user, $gameID) {
     return true;
 });
+*/

@@ -34,7 +34,7 @@ class GameUpdateEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('game.' . $this->game->id);
+        return new Channel('game.' . $this->game->id);
     }
 
     public function broadCastWith()
