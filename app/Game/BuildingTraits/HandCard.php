@@ -11,6 +11,6 @@ trait HandCard
 
     private function getOwnerHandCardsNumber(): int
     {
-        return $this->game->own_player->hand_buildings_number + $this->game->own_player->hand_goods_number;
+        return $this->own_player->hand_buildings_number + $this->own_player->hand_goods_number;
     }
 }

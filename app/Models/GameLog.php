@@ -273,4 +273,19 @@ class GameLog extends Model
             'text' => 'ゲームが終了した',
         ]);
     }
+
+    public static function createReservedActionLog(Game $game, GamePlayer $player, GameBuilding $building, string $text)
+    {
+        self::create([
+            'game_id' => $game->id,
+            'player_id' => $player->id,
+            'player_order' => $player->player_order,
+            'round' => $game->round,
+            'building_id' => $building->id,
+            'type' => LogType::RESERVE,
+            'is_done' => true,
+            'is_last' => true,
+            'text' => $text,
+        ]);
+    }
 }

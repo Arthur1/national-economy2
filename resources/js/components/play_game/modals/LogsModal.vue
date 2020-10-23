@@ -30,6 +30,9 @@
                                     <div v-else-if="log.type === 'reshuffle'" class="log">
                                         <font-awesome-icon icon="random" />{{ log.text }}
                                     </div>
+                                    <div v-else-if="log.type === 'reserve'" class="log">
+                                        <font-awesome-icon icon="info-circle" :class="`text-playerOrder-${log.player_order}`" />{{ log.text }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

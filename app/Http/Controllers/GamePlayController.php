@@ -175,6 +175,11 @@ class GamePlayController extends Controller
                 $building->appendEntityData($game);
             }
         }
+        if ($game->my_player) {
+            foreach ($game->my_player->handCards as $hand_card) {
+                $hand_card->appendEntityData($game);
+            }
+        }
         return $game;
     }
 
@@ -183,7 +188,6 @@ class GamePlayController extends Controller
         $game->round += 1;
         $game->save();
 
-        /*
         $game->load(['reserveLogs']);
         $game->append(['reserve_in_last_round_logs']);
         $reserve_logs = $game->reserve_in_last_round_logs;
@@ -192,7 +196,6 @@ class GamePlayController extends Controller
             $building_entity = $building->getEntity($game);
             $building_entity->reservedAction($log->player_id);
         }
-        */
 
         GameBuilding::createNewPublicBuilding($game);
         $sp_player = $game->players_sorted_from_sp->first();

@@ -16,4 +16,5 @@ interface Building
     public function prepareCalcVp();
     public function getVp(): int;
     public function isImmediateAction(): bool;
+    public function reservedAction(int $player_id);
 }

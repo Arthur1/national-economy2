@@ -97,6 +97,8 @@ class BuildingBase
 
     public function prepareCalcVp() {}
 
+    public function reservedAction(int $player_id) {}
+
     public function getVp(): int
     {
         return $this->building->card->vp;

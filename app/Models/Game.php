@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ActionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -84,6 +85,14 @@ class Game extends Model
             ->where('is_done', true);
     }
 
+    public function reserveLogs(): Relation
+    {
+        return $this->hasMany(GameLog::class, 'game_id')
+        ->where('type', LogType::ACTION)
+        ->where('action_type', ActionType::RESERVE)
+        ->where('is_done', true);
+    }
+
     public function wageLogs(): Relation
     {
         return $this->hasMany(GameLog::class, 'game_id')
@@ -161,5 +170,10 @@ class Game extends Model
             return $order;
         });
         return $sorted_player;
+    }
+
+    public function getReserveInLastRoundLogsAttribute(): Collection
+    {
+        return $this->reserveLogs->filter(fn($l) => $l->round === $this->round - 1);
     }
 }
