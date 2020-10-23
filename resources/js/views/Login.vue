@@ -3,6 +3,9 @@
         <div class="text-center loginBox maxHeight">
             <div class="form-signin">
                 <h1 class="h3 mb-3 font-weight-normal text-primary">ログイン</h1>
+                <div class="alert alert-danger mt-4" role="alert">
+                    後方互換性のない修正を行ったため、ユーザデータを含む全データを削除しました。2020/10/26以前にアカウントを作成した人は再度登録が必要です。
+                </div>
                 <form @submit.prevent="login">
                     <input type="text" id="form_name" class="form-control" placeholder="ユーザ名" required autofocus v-model="name">
                     <input type="password" id="form_password" class="form-control" placeholder="パスワード" required v-model="password">
