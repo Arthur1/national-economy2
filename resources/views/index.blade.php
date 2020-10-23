@@ -2,15 +2,14 @@
 <html lang="ja">
     <head>
         <!-- Global site tag (gtag.js) - Google Analytics -->
-        <!--
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137369865-4"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZVH2RTL5Q9"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'UA-137369865-4');
+
+            gtag('config', 'G-ZVH2RTL5Q9');
         </script>
-        -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
