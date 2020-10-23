@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\Enums\ActionType;
 
 /**
- * 石油コンビナート
+ * 精錬所
  */
-final class Building63 extends BuildingBase implements Building
+final class Building84 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Draw;
 
@@ -18,12 +18,12 @@ final class Building63 extends BuildingBase implements Building
 
     public function action(Request $request)
     {
-        $this->drawPileCards(4);
+        $this->drawPileCards(3);
         parent::action($request);
     }
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'は建物を4枚引いた';
+        return $this->my_player->user->name . 'は建物を3枚引いた';
     }
 }

@@ -8,22 +8,24 @@ use Illuminate\Http\Request;
 use App\Enums\ActionType;
 
 /**
- * 石油コンビナート
+ * 工房
  */
-final class Building63 extends BuildingBase implements Building
+final class Building69 extends BuildingBase implements Building
 {
     use \App\Game\BuildingTraits\Draw;
+    use \App\Game\BuildingTraits\VpToken;
 
     public ?string $action_type = ActionType::NO_CHOICE;
 
     public function action(Request $request)
     {
-        $this->drawPileCards(4);
+        $this->drawPileCards(1);
+        $this->increaseVpTokens(1);
         parent::action($request);
     }
 
     protected function actionLogText(): string
     {
-        return $this->my_player->user->name . 'は建物を4枚引いた';
+        return $this->my_player->user->name . 'は建物を1枚引き、勝利点を1枚得た';
     }
 }

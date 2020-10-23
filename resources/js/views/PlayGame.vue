@@ -13,6 +13,7 @@
             @push-open-round-end-discard-modal-button="openRoundEndDiscardModal"
             @push-open-sell-modal-button="openSellModal"
             @push-open-pick-modal-button="openPickModal"
+            @push-open-rural-modal-button="openRuralModal"
         />
         <div v-if="isMyTurn" class="alert alert-warning mt-3" role="alert">
             あなたの手番です
@@ -85,6 +86,11 @@
             :pickDesignOfficeCard="pickDesignOfficeCard"
             @push-pick-button="pick"
         />
+        <rural-modal
+            ref="ruralModal"
+            :rural_action_id="rural_action_id"
+            @push-rural-action-button="ruralAction"
+        />
     </div>
 </template>
 <script>
@@ -101,6 +107,7 @@ import ActionDiscardModal from '../components/play_game/modals/ActionDiscardModa
 import RoundEndDiscardModal from '../components/play_game/modals/RoundEndDiscardModal.vue'
 import SellModal from '../components/play_game/modals/SellModal.vue'
 import PickModal from '../components/play_game/modals/PickModal.vue'
+import RuralModal from '../components/play_game/modals/RuralModal.vue'
 
 import WindowNone from '../components/play_game/windows/WindowNone.vue'
 import WindowHandCards from '../components/play_game/windows/WindowHandCards.vue'
@@ -111,6 +118,7 @@ import WindowActionDiscard from '../components/play_game/windows/WindowActionDis
 import WindowRoundEndDiscard from '../components/play_game/windows/WindowRoundEndDiscard.vue'
 import WindowSell from '../components/play_game/windows/WindowSell.vue'
 import WindowDesignOffice from '../components/play_game/windows/WindowDesignOffice.vue'
+import WindowRural from '../components/play_game/windows/WindowRural.vue'
 
 export default {
     components: {
@@ -127,6 +135,7 @@ export default {
         RoundEndDiscardModal,
         SellModal,
         PickModal,
+        RuralModal,
 
         WindowNone,
         WindowHandCards,
@@ -136,7 +145,8 @@ export default {
         WindowActionDiscard,
         WindowRoundEndDiscard,
         WindowSell,
-        WindowDesignOffice
+        WindowDesignOffice,
+        WindowRural
     },
     data() {
         return {
@@ -151,7 +161,8 @@ export default {
             costIds: null,
             discardHandCards: [],
             sellBuildings: [],
-            pickDesignOfficeCard: null
+            pickDesignOfficeCard: null,
+            rural_action_id: null
         }
     },
     created() {
@@ -317,6 +328,10 @@ export default {
             this.pickDesignOfficeCard = pickDesignOfficeCard
             this.$refs.pickModal.openModal()
         },
+        openRuralModal(rural_action_id) {
+            this.rural_action_id = rural_action_id
+            this.$refs.ruralModal.openModal()
+        },
         useBuilding() {
             const payload = {
                 id: this.usingBuilding.id
@@ -429,6 +444,19 @@ export default {
             }).catch(err => {
                 this.handleFetchedGameError(err)
                 this.$refs.pickModal.closeModal()
+            })
+        },
+        ruralAction() {
+            const payload = {
+                action_id: this.rural_action_id
+            }
+            this.isLoading = true
+            axios.post(`/api/games/${this.$route.params.id}/action`, payload).then(res => {
+                this.handleFetchedGame(res)
+                this.$refs.ruralModal.closeModal()
+            }).catch(err => {
+                this.handleFetchedGameError(err)
+                this.$refs.ruralModal.closeModal()
             })
         }
     }

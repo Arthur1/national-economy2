@@ -2,6 +2,7 @@
 
 namespace App\Game\BuildingTraits;
 
+use App\Enums\CardType;
 use App\Enums\CommonCard;
 use App\Exceptions\GameInvalidActionException;
 use App\Models\GameDiscardCard;
@@ -24,6 +25,14 @@ trait Discard
             ];
         }
         DB::table(GameDiscardCard::TABLE_NAME)->insert($discard_cards_row);
+        GameHandCard::whereIn('id', $discard_cards->pluck('id')->toArray())->delete();
+    }
+
+    private function discardGoods(array $discard_ids, int $discard_number)
+    {
+        $hand_cards = $this->my_player->handCards;
+        $discard_cards = $hand_cards->filter(fn($v) => in_array($v->id, $discard_ids) and $v->card->type === CardType::GOODS);
+        if ($discard_cards->count() !== $discard_number) throw new GameInvalidActionException('捨てる枚数が異なります');
         GameHandCard::whereIn('id', $discard_cards->pluck('id')->toArray())->delete();
     }
 }
