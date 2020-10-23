@@ -35,7 +35,7 @@ class GameBuilding extends Model
     public function appendEntityData(Game $game)
     {
         $entity = $this->getEntity($game);
-        $this->can_use = $entity->canUse();
+        $this->can_use = $game->my_player_order ? $entity->canUse() : false;
         $this->occupying_players = $entity->occupyingPlayers();
     }
 
