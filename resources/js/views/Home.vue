@@ -14,28 +14,65 @@
                 <span class="mr-1rem">{{ game.players_number }}人ゲーム（{{ game.type_description }}）{{ game.my_player_order }}番手</span><br>
                 <font-awesome-icon icon="users" />{{ game.players.map(player => player.user.name) | implode }}<br>
                 <font-awesome-icon :icon="['far', 'clock']" />{{ game.created_at }}
+                <button
+                    v-if="game.organizer_id === $store.state.userID"
+                    class="btn deleteButton btn-outline-danger btn-sm"
+                    @click.prevent="openDeleteGameModal(game)"
+                >
+                    <font-awesome-icon icon="trash" />削除する
+                </button>
             </router-link>
         </div>
+        <delete-game-modal ref="deleteGameModal" :deleting_game="deleting_game" @push-delete-game-button="deleteGame" />
     </div>
 </template>
 <script>
+import DeleteGameModal from '../components/home/DeleteGameModal.vue'
+import Utils from '../mixins/utils'
+
 export default {
+    mixins: [
+        Utils
+    ],
+    components: {
+        DeleteGameModal
+    },
     data() {
         return {
-            gamesList: []
+            gamesList: [],
+            deleting_game: null
         }
     },
     created() {
-        axios.get('/api/games/in_progress').then(res => {
-            this.gamesList = res.data
-        }).catch(err => {
-            switch (err.response.status) {
-                case 401:
-                    this.$toast.warning('再度ログインしてください')
-                    this.$router.push({ name: 'login' })
-                    break
-            }
-        })
+        this.fetchGames()
+    },
+    methods: {
+        fetchGames() {
+            axios.get('/api/games/in_progress').then(res => {
+                this.gamesList = res.data
+            }).catch(err => {
+                switch (err.response.status) {
+                    case 401:
+                        this.$toast.warning('再度ログインしてください')
+                        this.$router.push({ name: 'login' })
+                        break
+                }
+            })
+        },
+        openDeleteGameModal(deleting_game) {
+            this.deleting_game = deleting_game
+            this.$refs.deleteGameModal.openModal()
+        },
+        deleteGame() {
+            axios.delete(`/api/games/${this.deleting_game.id}`).then(res => {
+                this.$toast.warning('ゲームを削除しました')
+                this.fetchGames()
+            }).catch(err => {
+                this.errorsToast(err)
+            }).finally(() => {
+                this.$refs.deleteGameModal.closeModal()
+            })
+        }
     },
     filters: {
         implode(array) {
@@ -50,5 +87,10 @@ export default {
 }
 .mr-1rem {
     margin-right: 1rem;
+}
+.deleteButton {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.5rem;
 }
 </style>

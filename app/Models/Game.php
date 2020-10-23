@@ -176,4 +176,17 @@ class Game extends Model
     {
         return $this->reserveLogs->filter(fn($l) => $l->round === $this->round - 1);
     }
+    
+    public function deleteWithRelations()
+    {
+        
+        GamePileCard::where('game_id', $this->id)->delete();
+        GameDiscardCard::where('game_id', $this->id)->delete();
+        GameHandCard::where('game_id', $this->id)->delete();
+        GameDesignOfficeCard::where('game_id', $this->id)->delete();
+        GameLog::where('game_id', $this->id)->delete();
+        GameBuilding::where('game_id', $this->id)->delete();
+        GamePlayer::where('game_id', $this->id)->delete();
+        $this->delete();
+    }
 }

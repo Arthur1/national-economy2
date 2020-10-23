@@ -68,4 +68,17 @@ class GameUtilController extends Controller
             'message' => 'Success'
         ];
     }
+
+    public function delete(Request $request, $id)
+    {
+        $game = Game::findOrFail($id);
+        if ($game->organizer_id !== Auth::id())
+            throw new \Exception('あなたはこのゲームを削除する権限を持っていません');
+        DB::transaction(function () use ($game) {
+            $game->deleteWithRelations();
+        });
+        return [
+            'message' => 'Deleted'
+        ];
+    }
 }
