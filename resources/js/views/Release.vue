@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h1 class="text-primary mt-5">リリースノート</h1>
-        <h2 class="text-secondary mt-4">2.0 <small class="date">2020/10/26</small></h2>
+        <h2 class="text-secondary mt-4">2.0 <small class="date">2020/10/24</small></h2>
         <p>
             ドメインをneo.buratsuki.pageに変更しました。過去バージョンと互換性のない変更を行ったため、データをすべて削除しました。<span class="text-danger">再度ユーザ登録が必要です。</span>
         </p>
@@ -25,6 +25,7 @@
         <ul>
             <li>特定の条件下で、ゲーム画面の自動更新が行われない</li>
             <li>設計事務所のドロー中にリシャッフルが入ったとき、ドローがやり直される</li>
+            <li>売却された建物が自然な並び順でない</li>
         </ul>
         <p>
             以下は既知の問題点です。修正を予定しています
