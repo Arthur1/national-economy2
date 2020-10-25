@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">考え直す</button>
-                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-use-building-button')">使用する</button>
+                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-use-building-button')" :disabled="isLoading">使用する</button>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
 import Modal from '../../../mixins/modal'
 
 export default {
-    props: ['building'],
+    props: ['building', 'isLoading'],
     mixins: [Modal]
 }
 </script>

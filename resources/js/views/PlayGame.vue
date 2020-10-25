@@ -5,6 +5,7 @@
             :is="currentWindow"
             :game="game"
             :isMyTurn="isMyTurn"
+            :isLoading="isLoading"
             @push-rollback-use-building-button="rollbackUseBuilding"
             @push-open-build-modal-button="openBuildModal"
             @push-open-build-double-modal-button="openBuildDoubleModal"
@@ -49,46 +50,55 @@
         <use-building-modal
             ref="useBuildingModal"
             :building="usingBuilding"
+            :isLoading="isLoading"
             @push-use-building-button="useBuilding"
         />
         <build-modal
             ref="buildModal"
             :buildHandCard="buildHandCard"
+            :isLoading="isLoading"
             @push-build-button="build"
         />
         <build-double-modal
             ref="buildDoubleModal"
             :buildHandCards="buildHandCards"
+            :isLoading="isLoading"
             @push-build-double-button="buildDouble"
         />
         <build-free-modal
             ref="buildFreeModal"
             :buildHandCard="buildHandCard"
+            :isLoading="isLoading"
             @push-build-free-button="buildFree"
         />
         <action-discard-modal
             ref="actionDiscardModal"
             :discardHandCards="discardHandCards"
+            :isLoading="isLoading"
             @push-action-discard-button="actionDiscard"
         />
         <round-end-discard-modal
             ref="roundEndDiscardModal"
             :discardHandCards="discardHandCards"
+            :isLoading="isLoading"
             @push-round-end-discard-button="roundEndDiscard"
         />
         <sell-modal
             ref="sellModal"
             :sellBuildings="sellBuildings"
+            :isLoading="isLoading"
             @push-sell-button="sell"
         />
         <pick-modal
             ref="pickModal"
             :pickDesignOfficeCard="pickDesignOfficeCard"
+            :isLoading="isLoading"
             @push-pick-button="pick"
         />
         <rural-modal
             ref="ruralModal"
             :rural_action_id="rural_action_id"
+            :isLoading="isLoading"
             @push-rural-action-button="ruralAction"
         />
     </div>
@@ -333,6 +343,10 @@ export default {
             this.$refs.ruralModal.openModal()
         },
         useBuilding() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 id: this.usingBuilding.id
             }
@@ -346,6 +360,10 @@ export default {
             })
         },
         rollbackUseBuilding() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             this.isLoading = true
             axios.post(`/api/games/${this.$route.params.id}/rollback_use_building`, {}).then(res => {
                 this.handleFetchedGame(res)
@@ -354,6 +372,10 @@ export default {
             })
         },
         build() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 build_id: this.buildHandCard.id,
                 cost_ids: this.costIds
@@ -368,6 +390,10 @@ export default {
             })
         },
         buildFree() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 build_id: this.buildHandCard.id
             }
@@ -381,6 +407,10 @@ export default {
             })
         },
         buildDouble() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 build_ids: this.buildHandCards.map(hand_card => hand_card.id),
                 cost_ids: this.costIds
@@ -395,6 +425,10 @@ export default {
             })
         },
         actionDiscard() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 discard_ids: this.discardHandCards.map(hand_card => hand_card.id)
             }
@@ -408,6 +442,10 @@ export default {
             })
         },
         roundEndDiscard() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 discard_ids: this.discardHandCards.map(hand_card => hand_card.id)
             }
@@ -421,6 +459,10 @@ export default {
             })
         },
         sell() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 sell_ids: this.sellBuildings.map(building => building.id)
             }
@@ -434,6 +476,10 @@ export default {
             })
         },
         pick() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 pick_id: this.pickDesignOfficeCard.id,
             }
@@ -447,6 +493,10 @@ export default {
             })
         },
         ruralAction() {
+            if (this.isLoading) {
+                this.$toast.error('現在ロード中です。時間をおいてください')
+                return
+            }
             const payload = {
                 action_id: this.rural_action_id
             }

@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">考え直す</button>
-                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-pick-button')">手札に加える</button>
+                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-pick-button')" :disabled="isLoading">手札に加える</button>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
 import Modal from '../../../mixins/modal'
 
 export default {
-    props: ['pickDesignOfficeCard'],
+    props: ['pickDesignOfficeCard', 'isLoading'],
     mixins: [Modal]
 }
 </script>

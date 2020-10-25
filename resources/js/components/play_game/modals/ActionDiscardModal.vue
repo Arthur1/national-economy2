@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">考え直す</button>
-                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-action-discard-button')">捨てる</button>
+                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-action-discard-button')" :disabled="isLoading">捨てる</button>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
 import Modal from '../../../mixins/modal'
 
 export default {
-    props: ['discardHandCards'],
+    props: ['discardHandCards', 'isLoading'],
     mixins: [Modal],
     computed: {
         cardNames() {

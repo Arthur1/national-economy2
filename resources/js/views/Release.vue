@@ -1,6 +1,13 @@
 <template>
     <div class="container">
         <h1 class="text-primary mt-5">リリースノート</h1>
+        <h2 class="text-secondary mt-4">2.0.1 <small class="date">2020/10/25</small></h2>
+        <p>
+            以下の問題を修正しました。
+        </p>
+        <ul>
+            <li>ユーザ登録画面およびゲーム画面にて、ボタンを連打すると二重送信が発生する</li>
+        </ul>
         <h2 class="text-secondary mt-4">2.0 <small class="date">2020/10/24</small></h2>
         <p>
             ドメインをneo.buratsuki.pageに変更しました。過去バージョンと互換性のない変更を行ったため、データをすべて削除しました。<span class="text-danger">再度ユーザ登録が必要です。</span>
