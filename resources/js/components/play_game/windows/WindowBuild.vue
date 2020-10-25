@@ -6,7 +6,7 @@
                 <div class="handCardsBox">
                     <div class="handCardDummy text-center">
                         <button type="submit" class="btn btn-primary btn-sm text-white" :disabled="isDisabled">決定</button><br><br>
-                        <button type="button" class="btn btn-secondary btn-sm" @click="$emit('push-rollback-use-building-button')">戻る</button>
+                        <button type="button" class="btn btn-secondary btn-sm" @click="$emit('push-rollback-use-building-button')" :disabled="isLoading">戻る</button>
                     </div>
                     <label v-for="card in game.my_hand_cards" :key="card.id" :for="'form_buildId-' + card.id" @click.right.prevent="toggleDiscard(card.id)" :class="{'cardLabel': card.card.type !== 'goods', 'is-selected': card.id === buildId, 'is-dis-selected': costIds.includes(card.id)}">
                         <hand-card :hand_card="card" />
@@ -32,7 +32,7 @@
 import HandCard from '../cards/HandCard.vue'
 export default {
     components: { HandCard },
-    props: ['game'],
+    props: ['game', 'isLoading'],
     data() {
         return {
             buildId: null,

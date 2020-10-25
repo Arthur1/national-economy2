@@ -14,7 +14,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">考え直す</button>
-                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-rural-action-button')">実行する</button>
+                    <button type="button" class="btn btn-primary text-white" @click="$emit('push-rural-action-button')" :disabled="isLoading">実行する</button>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
 import Modal from '../../../mixins/modal'
 
 export default {
-    props: ['rural_action_id'],
+    props: ['rural_action_id', 'isLoading'],
     mixins: [Modal]
 }
 </script>
