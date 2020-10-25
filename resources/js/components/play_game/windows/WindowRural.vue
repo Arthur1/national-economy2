@@ -6,7 +6,7 @@
                 <div class="handCardDummy text-center">
                     <button type="button" class="btn btn-outline-dark btn-sm" @click="$emit('push-open-rural-modal-button', 1)">+<span class="text-card-goods">■</span>2</button><br><br>
                     <button type="button" class="btn btn-outline-dark btn-sm" @click="$emit('push-open-rural-modal-button', 2)" :disabled="! has2goods">-<span class="text-card-goods">■</span>2 +<span class="text-card-building">■</span>3</button><br><br>
-                    <button type="button" class="btn btn-secondary btn-sm" @click="$emit('push-rollback-use-building-button')">戻る</button>
+                    <button type="button" class="btn btn-secondary btn-sm" @click="$emit('push-rollback-use-building-button')" :disabled="isLoading">戻る</button>
                 </div>
                 <hand-card v-for="hand_card in game.my_hand_cards" :hand_card="hand_card" :key="hand_card.id" />
             </div>
@@ -17,7 +17,7 @@
 import HandCard from '../cards/HandCard.vue'
 export default {
     components: { HandCard },
-    props: ['game'],
+    props: ['game', 'isLoading'],
     computed: {
         has2goods() {
             let goods = this.game.my_hand_cards.filter(card => card.card.type === 'goods')
