@@ -2,7 +2,7 @@
     <div class="container">
         <div class="alert alert-danger mt-4" role="alert">
             National Economy OnlineのURLがhttps://neo.buratsuki.page/に変更になりました。<br>
-            後方互換性のない修正を行ったため、ユーザデータを含む全データを削除しました。2020/10/26以前にアカウントを作成した人は再度登録が必要です。
+            後方互換性のない修正を行ったため、ユーザデータを含む全データを削除しました。2020/10/24以前にアカウントを作成した人は再度登録が必要です。
         </div>
         <div class="jumbotron p-5 rounded-lg m-3">
             <h1 class="display-4">National Economy Online</h1>
