@@ -8,7 +8,7 @@
                     <input type="email" id="form_email" class="form-control" placeholder="メールアドレス" required v-model="email">
                     <input type="password" id="form_password" class="form-control" placeholder="パスワード" required v-model="password">
                     <input type="password" id="form_password_confirmation" class="form-control" placeholder="パスワード(確認)" required v-model="password_confirmation">
-                    <button class="btn btn-lg btn-primary btn-block text-white" type="submit">登録</button>
+                    <button class="btn btn-lg btn-primary btn-block text-white" type="submit" :disabled="is_sending">登録</button>
                 </form>
                 <p class="mt-3">
                     <router-link to="/login">ログインはこちら</router-link>
@@ -26,11 +26,17 @@ export default {
             name: '',
             email: '',
             password: '',
-            password_confirmation: ''
+            password_confirmation: '',
+            is_sending: false
         }
     },
     methods: {
         register() {
+            if (this.is_sending) {
+                this.$toast.error('現在処理中です');
+                return
+            }
+            this.is_sending = true
             axios.get('/sanctum/csrf-cookie').then(response => {
                 let payload = {
                     name: this.name,
@@ -40,11 +46,18 @@ export default {
                 }
                 axios.post('/api/register', payload).then(response => {
                     this.$store.dispatch('setUser').then(() => {
+                        this.is_sending = false
                         this.$toast.success('ユーザ登録しました')
                         this.$router.push('/home')
                     })
-                }).catch(this.errorsToast)
-            }).catch(this.csrfErrorToast)
+                }).catch(err => {
+                    this.is_sending = false
+                    this.errorsToast(err)
+                })
+            }).catch(err => {
+                this.is_sending = false
+                this.csrfErrorToast(err)
+            })
         }
     }
 }
