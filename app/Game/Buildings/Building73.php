@@ -19,14 +19,14 @@ final class Building73 extends BuildingBase implements Building
 
     public function action(Request $request)
     {
-        $this->get_money = $this->my_player->active_workers_number === 1 ? 10 : 5;
+        $this->get_money = $this->my_player->active_workers_number === 0 ? 10 : 5;
         $this->getMoneyFromPool($this->get_money);
         parent::action($request);
     }
 
     public function canUse(): bool
     {
-        $this->get_money = $this->my_player->active_workers_number === 1 ? 10 : 5;
+        $this->get_money = $this->my_player->active_workers_number === 0 ? 10 : 5;
         if ($this->game->pool < $this->get_money) return false;
         return parent::canUse();
     }
