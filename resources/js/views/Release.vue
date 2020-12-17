@@ -1,6 +1,13 @@
 <template>
     <div class="container">
         <h1 class="text-primary mt-5">リリースノート</h1>
+        <h2 class="text-secondary mt-4">2.0.3 <small class="date">2020/12/17</small></h2>
+        <p>
+            バージョン2.0.2の改修により発生した以下の問題を修正しました。
+        </p>
+        <ul>
+            <li>家計が足りなくてもゲームカフェを使用できてしまうことがある</li>
+        </ul>
         <h2 class="text-secondary mt-4">2.0.2 <small class="date">2020/10/28</small></h2>
         <p>
             以下の問題を修正しました。
