@@ -1,6 +1,16 @@
 <template>
     <div class="container">
         <h1 class="text-primary mt-5">リリースノート</h1>
+        <h2 class="text-secondary mt-4">2.0.4 <small class="date">2021/01/18</small></h2>
+        <p>
+            以下の問題を修正しました。
+        </p>
+        <ul>
+            <li>通知やゲーム状態のリロードが複数回同時に行われてしまうことがある</li>
+        </ul>
+        <p>
+            また、バージョン3.0に関する予告情報を掲載しました。
+        </p>
         <h2 class="text-secondary mt-4">2.0.3 <small class="date">2020/12/17</small></h2>
         <p>
             バージョン2.0.2の改修により発生した以下の問題を修正しました。
