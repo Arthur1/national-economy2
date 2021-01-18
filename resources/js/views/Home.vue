@@ -2,6 +2,10 @@
     <div class="container">
         <h1 class="text-primary mt-5">ホーム</h1>
         <router-link :to="{ name: 'create_game' }" class="btn btn-info btn-block text-white mt-4"><font-awesome-icon icon="plus" />ゲーム作成</router-link>
+        <h2 class="text-secondary mt-4">お知らせ</h2>
+        <p>
+            National Economy Onlineをご利用いただいている皆さまは、<router-link :to="{ name: 'announcement_v3' }">「バージョン3.0の開発予告とお詫び」</router-link>をご一読ください。
+        </p>
         <h2 class="text-secondary mt-4">プレイ中のゲーム</h2>
         <div class="list-group">
             <router-link

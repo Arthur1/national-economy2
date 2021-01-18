@@ -11,6 +11,7 @@ import Home from '../views/Home.vue'
 import CreateGame from '../views/CreateGame.vue'
 import PlayGame from '../views/PlayGame.vue'
 import History from '../views/History.vue'
+import AnnouncementV3 from '../views/AnnouncementV3.vue'
 import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -102,6 +103,16 @@ const routes = [
         component: History,
         meta: {
             title: 'ゲーム履歴',
+            needsAuth: true,
+            hasHeader: true
+        }
+    },
+    {
+        path: '/announcement_v3',
+        name: 'announcement_v3',
+        component: AnnouncementV3,
+        meta: {
+            title: 'バージョン3.0の開発予告とお詫び',
             needsAuth: true,
             hasHeader: true
         }

@@ -186,7 +186,7 @@ export default {
         })
     },
     beforeDestroy() {
-        Echo.leave(`game.${this.$route.params.id}`)
+        Echo.leaveChannel(`game.${this.game.id}`)
     },
     computed: {
         myPlayer() {
