@@ -126,13 +126,13 @@ class GamePlayController extends Controller
 
     private function createNextLog(Game $game)
     {
+        $game->refresh();
         $next_player = $game->next_player;
         if ($next_player) {
             GameLog::createUseBuildingLog($game, $next_player);
             return;
         }
 
-        $game->refresh();
         $game->load(['discardLogs', 'wageLogs']);
         $game->append(['wage', 'players_sorted_from_sp', 'discard_in_round_logs', 'wage_in_round_logs']);
         $sorted_players = $game->players_sorted_from_sp;
