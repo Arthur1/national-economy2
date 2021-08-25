@@ -13,7 +13,7 @@ final class HandCard23 extends HandCardBase implements HandCard
 
     public function build()
     {
-        $this->increaseMaxHandCardsNumber(2);
+        $this->increaseMaxHandCardsNumber(4);
         parent::build();
     }
 }
