@@ -1,21 +1,13 @@
-ps:
-	cd laradock; docker-compose ps
+SAIL := ./vendor/bin/sail
 
-restart:
-	make stop
-	make start
+up:
+	$(SAIL) up -d
 
-start:
-	cd laradock; docker-compose up -d workspace nginx mysql php-worker
+down:
+	$(SAIL) down
 
-stop:
-	cd laradock; docker-compose down
+migrate:
+	$(SAIL) artisan migrate
 
-build:
-	cd laradock; docker-compose build workspace nginx mysql php-worker
-
-exec:
-	cd laradock; docker-compose exec --user 1000 workspace bash
-
-exec_mysql:
-	cd laradock; docker-compose exec mysql bash
+mysql:
+	$(SAIL) mysql
