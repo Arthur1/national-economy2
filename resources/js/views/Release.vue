@@ -1,6 +1,14 @@
 <template>
     <div class="container">
         <h1 class="text-primary mt-5">リリースノート</h1>
+        <h2 class="text-secondary mt-4">2.0.5 <small class="date">2021/08/26</small></h2>
+        <p>
+            以下の問題を修正しました。
+        </p>
+        <ul>
+            <li>ラウンド中最後の手番で専門学校を使用したとき、新しい労働者を配置することができない</li>
+            <li>倉庫を建設しても、手札上限が2枚しか増えない</li>
+        </ul>
         <h2 class="text-secondary mt-4">2.0.4 <small class="date">2021/01/18</small></h2>
         <p>
             以下の問題を修正しました。
