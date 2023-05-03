@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,6 +11,8 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').version();
-mix.sass('resources/scss/app.scss', 'public/css').version();
-mix.sourceMaps().js('node_modules/popper.js/dist/popper.js', 'public/js').sourceMaps();
+mix.js("resources/js/app.js", "public/js").vue({ version: 2 }).version();
+mix.sass("resources/scss/app.scss", "public/css").version();
+mix.sourceMaps()
+    .js("node_modules/popper.js/dist/popper.js", "public/js")
+    .sourceMaps();
